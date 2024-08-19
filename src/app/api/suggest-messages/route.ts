@@ -1,34 +1,24 @@
-import dbConnect from "@/lib/dbConnect";
-import UserModel from "@/model/User";
-import mongoose, { Mongoose } from "mongoose";
-import { getServerSession } from "next-auth";
-import { User } from "next-auth";
-import { AuthOptions } from "next-auth";
-// import {z} from "zod";
-// import {usenameValidation} from "@/schemas/signUpSchema";
+import { openai } from '@ai-sdk/openai';
+import { streamText } from 'ai';
+
+// Allow streaming responses up to 30 seconds
+export const maxDuration = 30;
+export const runtime = 'edge';
 
 
-export async function GET(req:Request) {
-  await dbConnect();
+export async function POST(req: Request) {
   try {
-    const session=await getServerSession();
-    const user:User=session?.user as User;
-    if(!session || !user){
-      return Response.json({ success: false, message: "Not authorised" },{status:401});
-    }
-    const userId=new mongoose.Types.ObjectId(user._id);
-    const userById=await UserModel.aggregate([
-      {$match:{id:userId}},
-      {$unwind:'$messages'},
-      {$sort:{'messages.createdAt':-1}},
-      {$group:{_id:'$_id',messages:{$push:'$messages'}}}
-    ])
-    if(!userById || userById.length===0){
-      return Response.json({ success: false, message: "User not found" },{status:404});
-    }
-    return Response.json({ success: true, messages:userById[0].messages },{status:200});
+    const prompt =
+        "Create a list of three open-ended and engaging questions formatted as a single string. Each question should be separated by '||'. These questions are for an anonymous social messaging platform, like Qooh.me, and should be suitable for a diverse audience. Avoid personal or sensitive topics, focusing instead on universal themes that encourage friendly interaction. For example, your output should be structured like this: 'What’s a hobby you’ve recently started?||If you could have dinner with any historical figure, who would it be?||What’s a simple thing that makes you happy?'. Ensure the questions are intriguing, foster curiosity, and contribute to a positive and welcoming conversational environment.";
+
+    const result = await streamText({
+      model: openai('gpt-3.5-turbo-instruct'),
+      prompt,
+      maxTokens:400
+    });
+    return Response.json({ success: true,suggestions: result.toDataStreamResponse() },{status:200});
   } catch (error) {
-    console.log("Failed to get messages",error);
-    return Response.json({ success: false, message: "Failed to toggle accept messages status" },{status:500});
+    console.log("Some error occured",error);
+    return Response.json({ success: false, message: "Failed to get suggestions" },{status:500});
   }
 }
