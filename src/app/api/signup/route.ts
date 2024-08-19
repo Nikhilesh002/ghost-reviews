@@ -26,7 +26,7 @@ export async function POST(req:Request) {
     if(existingUserByEmail){
       if(existingUserByEmail.isVerified){
         return Response.json(
-          {success:true,message:"User already exists with this email"},
+          {success:false,message:"User already exists with this email"},
           {status:400}
         );
       }
@@ -34,6 +34,7 @@ export async function POST(req:Request) {
         const hashedPwd=await bcrypt.hash(password,10);
         console.log(hashedPwd);
         
+        existingUserByEmail.username=username
         existingUserByEmail.password=hashedPwd;
         existingUserByEmail.verifyCode=newVerifyCode;
         existingUserByEmail.verifyCodeExpiry=new Date(Date.now()+3600000);  // +1hr in ms

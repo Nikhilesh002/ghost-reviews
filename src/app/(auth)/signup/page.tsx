@@ -37,8 +37,6 @@ const Page = () => {
     }
   })
 
-  console.log(debouncedUsername)
-
   useEffect(() => {
     const checkUsernameUniquesness=async () => {
       if(debouncedUsername){
@@ -71,13 +69,7 @@ const Page = () => {
           description:res.data.message
         })
       }
-      if(res.data.success){
-        toast({
-          title:"Success",
-          description:res.data.message
-        })
-      }
-      // router.replace(`/verify/${data.username}`);
+      router.push(`/verify/${data.username}`);
     } catch (error) {
       console.error(error);
       const axiosError=error as AxiosError<IApiResponse>;
@@ -120,8 +112,8 @@ const Page = () => {
                     </FormControl>
                   </div>
                   <div className="flex text-xs gap-1">
-                    {isCheckingUsername && <Loader2 className="h-10 mb-0.5 " /> }
-                    { usernameMessage!=='' && (usernameMessage==='Username is unique' ?
+                    {isCheckingUsername && <Loader2 className="h-5 mb-0.5 animate-spin " /> }
+                    { usernameMessage!=='' && (usernameMessage==='Username is unique' ?     // TODO username is longer tha 17 chars then its shown ... is taken
                             <p className="text-xs text-green-500">
                               <CheckCircle2 className=" inline-block text-green-500 h-4 pb-0.5 "/><p className="font-medium inline-block">{debouncedUsername}</p> is available
                             </p> :
@@ -166,7 +158,7 @@ const Page = () => {
                   <>
                     <Loader2 className="mr-1.5 h-5 w-5 animate-spin " /> Please wait
                   </>
-                ) : ('Sign In')
+                ) : ('Sign Up')
               }
             </Button>
           </form>
