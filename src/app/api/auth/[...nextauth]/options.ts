@@ -51,7 +51,7 @@ export const authOptions:NextAuthOptions={
       }
       return session
     },
-    async jwt({ token, user}) {
+    async jwt({ token, user}) {   // called first ig
       if(user){
         token._id=user._id?.toString();
         token.isVerified=user.isVerified;
