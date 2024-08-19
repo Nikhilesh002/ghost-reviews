@@ -1,7 +1,6 @@
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
-// import {z} from "zod";
-// import {usenameValidation} from "@/schemas/signUpSchema";
+
 
 
 export async function POST(req:Request) {
@@ -14,6 +13,8 @@ export async function POST(req:Request) {
     console.log(user)
     if(!user){
       return Response.json({ success: false, message: "User not found" },{status:500});
+    } else if(user.isVerified){
+      return Response.json({ success: false, message: "User already verified" },{status:500});
     }
 
     const isCodeCorrect=code===user.verifyCode;

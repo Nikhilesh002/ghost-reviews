@@ -10,18 +10,20 @@ export const authOptions:NextAuthOptions={
       id: "domain-login",
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" }
+        email: { label: "email", type: "text" },
+        password: { label: "password", type: "password" }
       },
       async authorize(credentials:any,req:any):Promise<any>{
         // u can extract data via credentials.identifier.email etc
         // here we write logic to verify user details obtained from prev line
         await dbConnect();
         try {
-          const user=await UserModel.findOne({$or:[
+          const user=await UserModel.findOne({
+            $or:[
             {email:credentials.identifier.email},
-            {username:credentials.identifier} // eqv to credentials.identifier.username
-          ]});
+            {username:credentials.identifier.username} // eqv to credentials.identifier.username
+            ]
+          });
           if(!user){
             throw new Error("no user Found");
           }

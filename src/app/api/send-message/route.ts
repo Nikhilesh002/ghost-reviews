@@ -1,12 +1,6 @@
 import dbConnect from "@/lib/dbConnect";
-import UserModel from "@/model/User";
-import mongoose, { Mongoose } from "mongoose";
-import { getServerSession } from "next-auth";
-import { User } from "next-auth";
-import { AuthOptions } from "next-auth";
-import { Message } from "@/model/User";
-// import {z} from "zod";
-// import {usenameValidation} from "@/schemas/signUpSchema";
+import UserModel, { Message } from "@/model/User";
+
 
 
 export async function POST(req:Request) {

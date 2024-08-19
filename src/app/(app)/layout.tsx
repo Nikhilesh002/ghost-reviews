@@ -2,7 +2,7 @@ import AuthProvider from "@/context/AuthProvider";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import { Toaster } from "@/components/ui/toaster"
 
 const fontSans = FontSans({
