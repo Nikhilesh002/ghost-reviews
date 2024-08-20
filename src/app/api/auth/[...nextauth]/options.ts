@@ -1,41 +1,38 @@
-import { NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials"
-import bcrypt from "bcryptjs";
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
+import bcrypt from "bcryptjs";
+import { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+
 
 export const authOptions:NextAuthOptions={
-  providers:[
+  providers: [
     CredentialsProvider({
-      id: "domain-login",
       name: "Credentials",
       credentials: {
-        email: { label: "email", type: "text" },
+        identifier: { label: "identifier", type: "text" },
         password: { label: "password", type: "password" }
       },
       async authorize(credentials:any,req:any):Promise<any>{
-        // u can extract data via credentials.identifier.email etc
-        // here we write logic to verify user details obtained from prev line
         await dbConnect();
         try {
           const user=await UserModel.findOne({
             $or:[
-            {email:credentials.identifier.email},
-            {username:credentials.identifier.username} // eqv to credentials.identifier.username
+            {email:credentials.identifier},
+            {username:credentials.identifier}
             ]
-          });
-          if(!user){
-            throw new Error("no user Found");
+          });          
+          if (!user) {
+            throw new Error('No user found with this email');
           }
-          if(!user.isVerified){
-            throw new Error("Verify account before login");
+          if (!user.isVerified) {
+            throw new Error('Please verify your account before logging in');
           }
           const isPasswordCorrect=await bcrypt.compare(credentials.password,user.password);
-          if(isPasswordCorrect){
+          if (isPasswordCorrect) {
             return user;
-          }
-          else{
-            throw new Error("Wrong password");
+          } else {
+            throw new Error('Incorrect password');
           }
         } catch (error:any) {
           throw new Error(error);
@@ -44,22 +41,33 @@ export const authOptions:NextAuthOptions={
     })
   ],
   callbacks:{
+  //   async signIn({ user, account, credentials }) {
+  //     if(account?.provider==='domain-login'){
+
+  //     }
+  //     return true
+  //   },
     async session({ session, token }) {
+      console.log("insession-token-",token,"session-",session)
       if(token){
         session.user._id=token._id;
         session.user.isVerified=token.isVerified;
-        session.user.isAcceptingMessages=token.isAcceptingMessages;
+        session.user.isAcceptingMessage=token.isAcceptingMessage;
         session.user.username=token.username
       }
       return session
     },
-    async jwt({ token, user}) {   // called first ig
+    async jwt({ token, user}) {
+      console.log("injwt-token-",token,"user-",user)
       if(user){
         token._id=user._id?.toString();
         token.isVerified=user.isVerified;
-        token.isAcceptingMessages=user.isAcceptingMessages;
+        token.isAcceptingMessage=user.isAcceptingMessage;
         token.username=user.username
+        token.name=user.username
+        token.picture=''
       }
+      console.log("injwtatret-token-",token,"user-",user)
       return token
     }
   },
@@ -69,5 +77,5 @@ export const authOptions:NextAuthOptions={
   session:{
     strategy:"jwt"
   },
-  secret:process.env.NEXTAUTH_KEY
-}
+  secret:process.env.NEXTAUTH_SECRET
+};

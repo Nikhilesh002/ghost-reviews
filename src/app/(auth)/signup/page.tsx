@@ -152,7 +152,7 @@ const Page = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting || usernameMessage!=='Username is unique'}>
               {
                 isSubmitting ? (
                   <>

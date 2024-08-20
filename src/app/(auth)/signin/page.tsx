@@ -32,34 +32,56 @@ const Page = () => {
   })
 
   
-  const onSubmit=async (data:z.infer<typeof signInSchema>)=>{
+  const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     setIsSubmitting(true);
-    const res=await signIn('credentials',{
-                                            redirect:false,
-                                            identifier:data.identifier,
-                                            password:data.password
-                                          })
-                                          console.log("euuu")
-    if (res?.error) {
-      if (res.error === 'CredentialsSignin') {
-        toast({
-          title: 'Login Failed',
-          description: 'Incorrect username or password',
-          variant: 'destructive',
-        });
-      } else {
-        toast({
-          title: 'Error',
-          description: res.error,
-          variant: 'destructive',
-        });
-      }
-    }
 
-    if (res?.url) {
-      router.replace('/dashboard');
+    try {
+        const res = await signIn('credentials', {
+            redirect: false,
+            identifier: data.identifier,
+            password: data.password,
+            // callbackUrl:'/dashboard'
+        });
+
+        // Check for errors and display appropriate messages
+        // if (res?.error) {
+        //     if (res.error === 'CredentialsSignin') {
+        //         toast({
+        //             title: 'Login Failed',
+        //             description: 'Incorrect username or password',
+        //             variant: 'destructive',
+        //         });
+        //     } else {
+        //         toast({
+        //             title: 'Error',
+        //             description: res.error,
+        //             variant: 'destructive',
+        //         });
+        //     }
+        // } else if (res?.ok) {
+            // Redirect the user if sign-in was successful
+            router.push('/dashboard');
+        // } else {
+        //     // Handle unexpected responses
+        //     toast({
+        //         title: 'Unexpected Response',
+        //         description: 'An unexpected response was received. Please try again later.',
+        //         variant: 'destructive',
+        //     });
+        // }
+    } catch (error) {
+        // Handle unexpected errors
+        console.error('Unexpected error:', error);
+        toast({
+            title: 'Unexpected Error',
+            description: 'An unexpected error occurred. Please try again later.',
+            variant: 'destructive',
+        });
+    } finally {
+        setIsSubmitting(false);
     }
-  }
+};
+
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-800">

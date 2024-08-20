@@ -1,9 +1,20 @@
-import React from 'react'
+"use client"
 
-function page() {
+import { Button } from '@/components/ui/button';
+import { signOut } from 'next-auth/react';
+import React from 'react';
+import { useSession } from 'next-auth/react';
+
+function Page() {
+  const session=useSession();
   return (
-    <div>dashhh</div>
+    <div>
+      <Button onClick={()=>signOut({
+        callbackUrl:'/signin'
+      })} >Logout</Button>
+      <p>{JSON.stringify(session)}</p>
+    </div>
   )
 }
 
-export default page;
+export default Page;
