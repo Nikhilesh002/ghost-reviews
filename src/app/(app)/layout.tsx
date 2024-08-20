@@ -1,10 +1,4 @@
-// import { cn } from "@/lib/utils";
-// import { Inter as FontSans } from "next/font/google";
-
-// const fontSans = FontSans({
-//   subsets: ["latin"],
-//   variable: "--font-sans",
-// })
+import Navbar from "@/components/Navbar";
 
 export default function RootLayout({
   children,
@@ -12,11 +6,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-      >
+    <div className="flex flex-col min-h-screen">
+      <Navbar/>
       {children}
-      </body>
-    </html>
+    </div>
   );
 }
