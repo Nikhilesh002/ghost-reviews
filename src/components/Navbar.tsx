@@ -5,6 +5,7 @@ import { useSession,signOut  } from "next-auth/react";
 // import { User } from "next-auth";
 import { Button } from "./ui/button";
 import Image from "next/image";
+import logo from '@/app/icon.png'
 
 const Navbar = () => {
 
@@ -14,11 +15,14 @@ const Navbar = () => {
     <nav className="p-4 md:p-6 shadow-md bg-gray-900 text-white">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
         <div className="flex gap-2">
-          <Image src="/../../app/icon.png" width="20" height="20" />
-          <Link href="/" className="text-xl font-bold mb-4 md:mb-0">
-            Ghost Reviews
-        </Link>
+          <Image className="rounded" src={logo} width="40" height="16" alt="logo" />
+          <div className=" mt-1">
+            <Link href="/" className="text-2xl font-bold mb-4 md:mb-0">
+              Ghost Reviews
+            </Link>
+          </div>
         </div>
+
         {session && session.status==="authenticated" && session.data ? (
           <>
             <span className="mr-4">

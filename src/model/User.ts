@@ -1,6 +1,7 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 export interface Message extends Document{
+  title:string;
   content:string;
   createdAt:Date;
 }

@@ -6,7 +6,7 @@ import UserModel, { Message } from "@/model/User";
 export async function POST(req:Request) {
   await dbConnect();
   try {
-    const {username,content}=await req.json();
+    const {username,content,title}=await req.json();
     const user=await UserModel.findOne({username,isVerified:true});
     if(!user){
       return Response.json({ success: false, message: "User not found" },{status:404});
