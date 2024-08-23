@@ -11,7 +11,7 @@ export async function POST(req:Request) {
     if(!user){
       return Response.json({ success: false, message: "User not found" },{status:404});
     }
-    if(!user.isAcceptingMessage){
+    if(!user.isAcceptingMessages){
       return Response.json({ success: false, message: "User is not accepting messages" },{status:401});
     }
     const newMessage={content,createdAt:new Date()} as Message;

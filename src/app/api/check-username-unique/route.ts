@@ -25,7 +25,6 @@ export async function GET(req:NextRequest) {
                 : "Invalid query parameters"
       },{status:400});
     }
-    // const {username}=res.data
 
     const existingVerifiedUser=await UserModel.findOne({username,isVerified:true});
     if(existingVerifiedUser){

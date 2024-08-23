@@ -18,7 +18,7 @@ export async function POST(req:Request) {
     if(!userByUsername){
       return Response.json({ success: false, message: "User not found" },{status:500});
     }
-    userByUsername.isAcceptingMessage=!userByUsername.isAcceptingMessage;
+    userByUsername.isAcceptingMessages=!userByUsername.isAcceptingMessages;
     await userByUsername.save();
     return Response.json({ success: true, message: "Toggled accept messages status" },{status:200});
   } catch (error) {
@@ -39,7 +39,7 @@ export async function GET(req:Request) {
     if(!userByUsername){
       return Response.json({ success: false, message: "User not found" },{status:500});
     }
-    return Response.json({ success: true, isAcceptingMessages:userByUsername.isAcceptingMessage },{status:200});
+    return Response.json({ success: true, isAcceptingMessagess:userByUsername.isAcceptingMessages },{status:200});
   } catch (error) {
     console.log("Failed to verify user",error);
     return Response.json({ success: false, message: "Failed to get accept messages status" },{status:500});

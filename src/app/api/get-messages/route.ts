@@ -8,6 +8,7 @@ import { getServerSession, User } from "next-auth";
 export async function GET(req:Request) {
   await dbConnect();
   try {
+    // only logged in users have to access
     const session=await getServerSession();
     const user:User=session?.user as User;
     if(!session || !user){

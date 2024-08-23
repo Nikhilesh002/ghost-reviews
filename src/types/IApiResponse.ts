@@ -1,8 +1,8 @@
-import { Message } from "@/model/User"
+import { Message } from "@/model/User";
 
 export interface IApiResponse{
   success:boolean,
   message:string,
-  isAcceptingMessages?:boolean,
+  isAcceptingMessagess?:boolean,
   messages?:Message[],
 }
