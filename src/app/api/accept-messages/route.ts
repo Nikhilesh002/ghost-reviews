@@ -14,7 +14,7 @@ export async function POST(req:Request) {
     }
     const userId=user._id
     // const {acceptMessages}=await req.json();
-    const userByUsername=await UserModel.findOne({username:user.username});
+    const userByUsername=await UserModel.findOne({username:user.name});
     if(!userByUsername){
       return Response.json({ success: false, message: "User not found" },{status:500});
     }
@@ -35,11 +35,11 @@ export async function GET(req:Request) {
     if(!session || !user){
       return Response.json({ success: false, message: "Not authorised" },{status:401});
     }
-    const userByUsername=await UserModel.findOne({username:user.username});
+    const userByUsername=await UserModel.findOne({username:user.name});
     if(!userByUsername){
       return Response.json({ success: false, message: "User not found" },{status:500});
     }
-    return Response.json({ success: true, isAcceptingMessagess:userByUsername.isAcceptingMessages },{status:200});
+    return Response.json({ success: true, isAcceptingMessages:userByUsername.isAcceptingMessages },{status:200});
   } catch (error) {
     console.log("Failed to verify user",error);
     return Response.json({ success: false, message: "Failed to get accept messages status" },{status:500});

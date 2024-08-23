@@ -28,11 +28,12 @@ import { IApiResponse } from "@/types/IApiResponse";
 
 
 type MessageCardProps={
+  key:number,
   message:Message;
   onMessageDelete:(messageId:string)=>void
 }
 
-const MessageCard = ({message,onMessageDelete}:MessageCardProps) => {
+const MessageCard = ({message,onMessageDelete,key}:MessageCardProps) => {
 
   const {toast}=useToast();
 
@@ -47,7 +48,7 @@ const MessageCard = ({message,onMessageDelete}:MessageCardProps) => {
   }
 
   return (
-    <Card>
+    <Card key={key}>
       <CardHeader>
         <CardTitle>Card Title</CardTitle>
         <AlertDialog>

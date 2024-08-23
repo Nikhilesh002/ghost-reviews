@@ -42,7 +42,7 @@ export const authOptions:NextAuthOptions={
   ],
   callbacks:{
   //   async signIn({ user, account, credentials }) {
-  //     if(account?.provider==='domain-login'){
+  //     if(account?.provider==='github'){
 
   //     }
   //     return true
@@ -55,6 +55,8 @@ export const authOptions:NextAuthOptions={
         session.user.isAcceptingMessages=token.isAcceptingMessages;
         session.user.username=token.username
       }
+      else console.log("No token")
+      console.log("insessionret-token-",token,"session-",session)
       return session
     },
     async jwt({ token, user}) {
@@ -67,6 +69,7 @@ export const authOptions:NextAuthOptions={
         token.name=user.username
         token.picture=''
       }
+      else console.log("No user")
       console.log("injwtatret-token-",token,"user-",user)
       return token
     }
