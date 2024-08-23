@@ -12,6 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import axios, { AxiosError } from 'axios';
 import { Loader2, RefreshCcw } from 'lucide-react';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -113,7 +114,7 @@ const Page = () => {
     return <div>Please login</div>
   }
 
-  const profileUrl=`${window.location.href}/u/${session?.data?.user?.username}`;  
+  const profileUrl=`${window.location.origin}/u/${session?.data?.user?.username}`;  
   
   const copyToClipboard=()=>{
     navigator.clipboard.writeText(profileUrl);
@@ -128,13 +129,10 @@ const Page = () => {
 
       <div className="mb-4">
         <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link</h2>{' '}
-        <div className="flex items-center">
-          <input
-            type="text"
-            value={profileUrl}
-            disabled
-            className="input input-bordered w-full p-2 mr-2"
-          />
+        <div className="flex items-center ">
+          <div className="bg-gray-50 text-blue-500 underline rounded w-full p-2 mr-2">
+            <Link href={profileUrl} className="" >{profileUrl}</Link>
+          </div>
           <Button onClick={copyToClipboard}>Copy</Button>
         </div>
       </div>
