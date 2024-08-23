@@ -10,23 +10,21 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import axios, { AxiosError } from 'axios';
 import { IApiResponse } from '@/types/IApiResponse';
 import { useToast } from '@/components/ui/use-toast';
 import { Skeleton } from "@/components/ui/skeleton"
+import { Loader2 } from 'lucide-react';
 
 
 const formSchema = z.object({
-  title: z.string().min(5).max(60),
   content: z.string().min(10).max(300),
 })
 
@@ -36,29 +34,46 @@ const Page = () => {
   const {toast}=useToast();
   const [messages,setMessages]=useState<string[]>([]);
   const [isGettingSuggestions,setIsGettingSuggestions]=useState<boolean>(false);
+  const [isSubmitting,setIsSubmitting]=useState<boolean>(false);
 
   const form=useForm<z.infer <typeof formSchema>>({
     resolver:zodResolver(formSchema),
     defaultValues:{
-      title:'',
       content:''
     }
   });
+  const {register,handleSubmit,control,watch,setValue}=form;
 
   const onSubmit=async(data:z.infer<typeof formSchema>)=>{
-    console.log({...data,username});
+    setIsSubmitting(true);
+    try {
+      const res=await axios.post<IApiResponse>('/api/send-message',{...data,username});
+      if(res.status===200 && res.data.success){
+        toast({
+          title:res.data.message
+        })
+        setValue("content",'');
+      }
+    } catch (error) {
+      console.error(error);
+      const axiosError=error as AxiosError<IApiResponse>;
+      toast({
+        title:"Error",
+        description:axiosError.response?.data.message || "Failed to generate message suggestions",
+        variant:"destructive"
+      })
+    } finally{
+      setIsSubmitting(false);
+    }
   }
 
   const suggestMessages=useCallback(async()=>{
     setIsGettingSuggestions(true);
     try {
       const res=await axios.get<IApiResponse>('/api/suggest-messages');
-      console.log(res)
       if(res.status===200 && res.data.success){
-        console.log(res.data.message);
         const suggestions=res.data.message;
         const temp= suggestions.split('||')
-        console.log(temp)
         setMessages(temp);
       } else{
         toast({
@@ -82,7 +97,7 @@ const Page = () => {
   
 
   return (
-    <div className='dark'>
+    <div className=''>
       <h1 className='text-3xl text-center font-medium mt-5 mb-3 '>Welcome to {username}&apos;s page</h1>
 
       {/* send anonymous msg */}
@@ -94,34 +109,26 @@ const Page = () => {
           </CardHeader>
           <CardContent>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Title</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter title" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
                 <FormField
                   control={form.control}
                   name="content"
-                  render={({ field }) => (
+                  render={() => (
                     <FormItem>
                       <FormLabel>Content</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Enter content" {...field} />
+                        <Textarea placeholder="Enter content" {...register("content")} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <Button type="submit">Submit</Button>
+                <div className="flex gap-2">
+                  <Button type="submit">Submit</Button>
+                  {
+                    isSubmitting && <Loader2 className='w-8 h-8 mt-0.5 animate-spin' />
+                  }
+                </div>
               </form>
             </Form>
           </CardContent>
@@ -138,7 +145,7 @@ const Page = () => {
           <CardContent className='flex flex-col gap-2'>
             {
               messages.length!==0 ? messages?.map((message,index)=>(
-                <Button key={index} className='text-wrap' variant="outline">{message}</Button>
+                <Button key={index} onClick={()=>setValue("content",message)} className='text-wrap' variant="outline">{message}</Button>
               )) : 
                 isGettingSuggestions ? 
                   <div className="flex flex-col gap-2">
