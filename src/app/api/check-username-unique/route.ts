@@ -3,6 +3,7 @@ import UserModel from "@/model/User";
 import {z} from "zod";
 import {usenameValidation} from "@/schemas/signUpSchema";
 import { NextRequest, NextResponse } from "next/server";
+import { URL } from 'url';
 
 const UsernameQuerySchema=z.object({
   username:usenameValidation
@@ -11,8 +12,9 @@ const UsernameQuerySchema=z.object({
 export async function GET(req:NextRequest) {
   await dbConnect();
   try {
-    const searchParams = req.nextUrl.searchParams;
-    const username=searchParams.get('username');
+    const currentUrl = new URL(req.url);
+    const username = currentUrl.searchParams.get('username');
+
     if (!username) {
       return NextResponse.json(
         { success: false, message: "Username query parameter is required" },
