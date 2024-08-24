@@ -43,7 +43,7 @@ const Page = () => {
         setIsCheckingUsername(true);
         setUsernameMessage('');
         try {
-          const res=await axios.get(`/api/check-username-unique?username=${debouncedUsername}`)
+          const res=await axios.post('/api/check-username-unique',{username:debouncedUsername})
           if(res.status===200){
             setUsernameMessage(res.data.message);
           }

@@ -3,25 +3,16 @@ import UserModel from "@/model/User";
 import {z} from "zod";
 import {usenameValidation} from "@/schemas/signUpSchema";
 import { NextRequest, NextResponse } from "next/server";
-import { URLSearchParams } from "url";
 
 const UsernameQuerySchema=z.object({
   username:usenameValidation
 })
 
-export async function GET(req:NextRequest) {
+export async function POST(req:NextRequest) {
   await dbConnect();
   try {
-    const url = new URL(req.url);
-    const searchParams = new URLSearchParams(url.search);
-    const username = searchParams.get('username');
-    
-    if (!username) {
-      return NextResponse.json(
-        { success: false, message: "Username query parameter is required" },
-        { status: 400 }
-      );
-    }
+    const {username} = await req.json()
+
     // validate with zod
     const res=UsernameQuerySchema.safeParse({username});
     console.log("huhu",res)
@@ -31,7 +22,7 @@ export async function GET(req:NextRequest) {
         success:false,
         message:usernameErrors?.length>0
                 ? usernameErrors.join(',')
-                : "Invalid query parameters"
+                : "Invalid username"
       },{status:400});
     }
 
