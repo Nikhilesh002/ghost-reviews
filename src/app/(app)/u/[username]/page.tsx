@@ -97,7 +97,7 @@ const Page = () => {
   
 
   return (
-    <div className='dark'>
+    <div className=''>
       <h1 className='text-3xl text-center font-medium mt-5 mb-3 '>Welcome to {username}&apos;s page</h1>
 
       {/* send anonymous msg */}

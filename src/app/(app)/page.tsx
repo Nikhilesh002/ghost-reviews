@@ -1,21 +1,16 @@
 'use client';
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Mail } from 'lucide-react'; // Assuming you have an icon for messages
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import Autoplay from 'embla-carousel-autoplay';
 import messages from '@/static-data/messages.json';
+import Autoplay from 'embla-carousel-autoplay';
+import { Mail } from 'lucide-react'; // Assuming you have an icon for messages
 
 
 import {
   Carousel,
   CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel"
+  CarouselItem
+} from "@/components/ui/carousel";
 import { useRef } from 'react';
 
 function Page() {
@@ -35,7 +30,7 @@ function Page() {
       </section>
 
       {/* carousel */}
-      <main>
+      <main className=''>
       <Carousel
           plugins={[Autoplay({ delay: 2000 })]}
           className="w-full max-w-lg md:max-w-xl"

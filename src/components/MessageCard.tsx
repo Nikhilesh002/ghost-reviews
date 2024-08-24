@@ -47,6 +47,11 @@ const MessageCard = ({message,onMessageDelete,key}:MessageCardProps) => {
     }
   }
 
+  const formattedDate=(date:Date)=>{
+    const niceDate=new Date(date).toLocaleString().split(',');
+    return "on "+niceDate[0]+" at "+niceDate[1].substring(0,6)+niceDate[1].substring(9,12);
+  }
+
   return (
     <Card key={key}>
       <CardHeader>
@@ -71,7 +76,7 @@ const MessageCard = ({message,onMessageDelete,key}:MessageCardProps) => {
             </AlertDialogContent>
           </AlertDialog>
         </div>
-        <CardDescription>Received at {message.createdAt.toString()}</CardDescription>   {/* TODO Date format */}
+        <CardDescription>Received at {formattedDate(message.createdAt)}</CardDescription>   {/* TODO Date format */}
       </CardHeader>
       <CardContent>
         <p>{message.content}</p>

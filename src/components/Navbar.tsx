@@ -14,14 +14,16 @@ const Navbar = () => {
   return (
     <nav className="p-4 md:p-6 shadow-md bg-gray-900 text-white">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
+          <Link href="/">
         <div className="flex gap-2">
-          <Image className="rounded" src={logo} width="40" height="16" alt="logo" />
-          <div className=" mt-1">
-            <Link href="/" className="text-2xl font-bold mb-4 md:mb-0">
-              Ghost Reviews
-            </Link>
-          </div>
+            <Image className="rounded" src={logo} width="40" height="15" alt="logo" />
+            <div className=" mt-1">
+              <p className="text-2xl font-bold mb-4 md:mb-0">
+                Ghost Reviews
+              </p>
+            </div>
         </div>
+          </Link>
 
         {session && session.status==="authenticated" && session.data ? (
           <>
