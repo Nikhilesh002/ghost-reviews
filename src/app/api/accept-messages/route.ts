@@ -22,7 +22,7 @@ export async function POST(req:Request) {
     await userByUsername.save();
     return Response.json({ success: true, message: "Toggled accept messages status" },{status:200});
   } catch (error) {
-    console.log("Failed to verify user",error);
+    console.error("Failed to verify user",error);
     return Response.json({ success: false, message: "Failed to toggle accept messages status" },{status:500});
   }
 }
@@ -41,7 +41,7 @@ export async function GET(req:Request) {
     }
     return Response.json({ success: true, isAcceptingMessages:userByUsername.isAcceptingMessages },{status:200});
   } catch (error) {
-    console.log("Failed to verify user",error);
+    console.error("Failed to verify user",error);
     return Response.json({ success: false, message: "Failed to get accept messages status" },{status:500});
   }
 }

@@ -10,7 +10,6 @@ export async function POST(req:Request) {
     const decodedUsername=decodeURIComponent(username);
 
     const user=await UserModel.findOne({username:decodedUsername});
-    console.log(user)
     if(!user){
       return Response.json({ success: false, message: "User not found" },{status:500});
     } else if(user.isVerified){
@@ -34,7 +33,7 @@ export async function POST(req:Request) {
 
     return Response.json({ success: false, message: "Something went wrong" },{status:500});
   } catch (error) {
-    console.log("Failed to verify user",error);
+    console.error("Failed to verify user",error);
     return Response.json({ success: false, message: "Failed to verify user" },{status:500});
   }
 }

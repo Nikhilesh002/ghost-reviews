@@ -48,19 +48,15 @@ export const authOptions:NextAuthOptions={
   //     return true
   //   },
     async session({ session, token }) {
-      console.log("insession-token-",token,"session-",session)
       if(token){
         session.user._id=token._id;
         session.user.isVerified=token.isVerified;
         session.user.isAcceptingMessages=token.isAcceptingMessages;
         session.user.username=token.username
       }
-      else console.log("No token")
-      console.log("insessionret-token-",token,"session-",session)
       return session
     },
     async jwt({ token, user}) {
-      console.log("injwt-token-",token,"user-",user)
       if(user){
         token._id=user._id?.toString();
         token.isVerified=user.isVerified;
@@ -69,8 +65,6 @@ export const authOptions:NextAuthOptions={
         token.name=user.username
         token.picture=''
       }
-      else console.log("No user")
-      console.log("injwtatret-token-",token,"user-",user)
       return token
     }
   },

@@ -24,14 +24,11 @@ const Page = () => {
   });
 
   const onSubmit=async(data:z.infer<typeof verifySchema>)=>{
-    console.log({username:params.username,
-      code:data.code})
     try {
       const res= await axios.post('/api/verify-code',{
         username:params.username,
         code:data.code
       })
-      console.log(res)
       if(res.data.success){
         toast({
           description:res.data.message
@@ -45,7 +42,6 @@ const Page = () => {
       }
     } catch (error) {
       console.error(error);
-      console.log("hehe")
       const axiosError=error as AxiosError<IApiResponse>;
       toast({
         title:"SignUp failed",

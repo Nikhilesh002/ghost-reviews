@@ -25,7 +25,7 @@ export async function GET(req:Request) {
     // }
     return Response.json({ success: true, messages:userById[0]?.messages },{status:200});
   } catch (error) {
-    console.log("Failed to get messages",error);
+    console.error("Failed to get messages",error);
     return Response.json({ success: false, message: "Failed to toggle accept messages status" },{status:500});
   }
 }

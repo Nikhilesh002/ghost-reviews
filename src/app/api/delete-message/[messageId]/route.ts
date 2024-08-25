@@ -24,7 +24,7 @@ export async function DELETE(req:Request,{params}:{params:{messageId:string}}) {
     }
     return Response.json({ success: true, message:"Message deleted" },{status:200});
   } catch (error) {
-    console.log("Failed to delete message",error);
+    console.error("Failed to delete message",error);
     return Response.json({ success: false, message: "Failed to delete message" },{status:500});
   }
 }

@@ -19,7 +19,7 @@ export async function POST(req:Request) {
     await user.save()
     return Response.json({ success: true, message:"Message sent" },{status:200});
   } catch (error) {
-    console.log("Failed to send message : ",error);
+    console.error("Failed to send message : ",error);
     return Response.json({ success: false, message: "Failed to send message" },{status:500});
   }
 }

@@ -15,7 +15,6 @@ export async function POST(req:NextRequest) {
 
     // validate with zod
     const res=UsernameQuerySchema.safeParse({username});
-    console.log("huhu",res)
     if(!res.success){
       const usernameErrors=res.error.format().username?._errors || [];
       return NextResponse.json({
@@ -33,7 +32,7 @@ export async function POST(req:NextRequest) {
 
     return NextResponse.json({ success: true, message: "Username is unique" },{status:200});
   } catch (error) {
-    console.log("Failed to check username",error);
+    console.error("Failed to check username",error);
     return NextResponse.json({ success: false, message: "Failed to check username" },{status:500});
   }
 }

@@ -48,7 +48,7 @@ const Page = () => {
             setUsernameMessage(res.data.message);
           }
         } catch (error) {
-          console.log(error);
+          console.error(error);
           const axiosError=error as AxiosError<IApiResponse>;
           setUsernameMessage(axiosError.response?.data.message ?? "Error checking username");
         } finally{

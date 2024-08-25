@@ -7,10 +7,8 @@ export async function POST(req:Request) {
   await dbConnect();
   try {
     const {username,email,password}:{username:string,email:string,password:string} = await req.json();
-    console.log(username,"--",email,"--",password);
     // check if username already exists
     const existingUserVerifiedByUsername=await UserModel.findOne({username:username,isVerified:true});
-    console.log(existingUserVerifiedByUsername);
     if(existingUserVerifiedByUsername){
       return Response.json(
         {success:false,message:"Username already taken"},
@@ -19,10 +17,8 @@ export async function POST(req:Request) {
     }
     // check if email already exists
     const existingUserByEmail=await UserModel.findOne({email:email});
-    console.log(existingUserByEmail);
     // const verifyCode=Math.floor(((Math.random()+1)*1000000)%1000003).toString();
     const newVerifyCode=Math.floor(1000000+Math.random()*9000000).toString();
-    console.log(newVerifyCode);
     if(existingUserByEmail){
       if(existingUserByEmail.isVerified){
         return Response.json(
@@ -32,8 +28,6 @@ export async function POST(req:Request) {
       }
       else{
         const hashedPwd=await bcrypt.hash(password,10);
-        console.log(hashedPwd);
-        
         existingUserByEmail.username=username
         existingUserByEmail.password=hashedPwd;
         existingUserByEmail.verifyCode=newVerifyCode;
@@ -58,12 +52,9 @@ export async function POST(req:Request) {
       })
       await newUser.save();
     }
-    console.log("haha");
     // send verification email
     const emailResponse= await sendVerificationEmail({email,username,verifyCode:newVerifyCode});
-    // const emailResponse={ success: true, message: "OTP sent successfully" };
-    console.log("emailres",emailResponse);
-    
+    // const emailResponse={ success: true, message: "OTP sent successfully" };    
     if(!emailResponse.success){
       return Response.json(
         {success:false,message:emailResponse.message},
