@@ -2,7 +2,7 @@ import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
 import { getServerSession, User } from "next-auth";
 
-
+export const dynamic = 'force-dynamic';
 
 export async function POST(req:Request) {
   await dbConnect();

@@ -93,7 +93,7 @@ const Page = () => {
     } finally{
       setIsGettingSuggestions(false);
     }
-  },[]);
+  },[toast]);
   
 
   return (
