@@ -1,12 +1,13 @@
 "use client"
  
-import { useParams } from 'next/navigation';
-import React, { useCallback, useState } from 'react'
-import { z } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
-import {useForm} from 'react-hook-form';
+import { useParams } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from "zod";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -14,13 +15,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
+} from "@/components/ui/form";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import axios, { AxiosError } from 'axios';
-import { IApiResponse } from '@/types/IApiResponse';
 import { useToast } from '@/components/ui/use-toast';
-import { Skeleton } from "@/components/ui/skeleton"
+import { IApiResponse } from '@/types/IApiResponse';
+import axios, { AxiosError } from 'axios';
 import { Loader2 } from 'lucide-react';
 
 
@@ -35,6 +35,7 @@ const Page = () => {
   const [messages,setMessages]=useState<string[]>([]);
   const [isGettingSuggestions,setIsGettingSuggestions]=useState<boolean>(false);
   const [isSubmitting,setIsSubmitting]=useState<boolean>(false);
+  const [isSuggestingMessages,setIsSuggestingMessages]=useState<boolean>(false);
 
   const form=useForm<z.infer <typeof formSchema>>({
     resolver:zodResolver(formSchema),
@@ -43,6 +44,20 @@ const Page = () => {
     }
   });
   const {register,handleSubmit,control,watch,setValue}=form;
+
+  useEffect(()=>{
+    const getSuggestionsStatus=async()=>{
+      try {
+        const res=await axios.post<IApiResponse>('/api/suggestion-status',{type:"see"});
+        if(res.data.success){
+          setIsSuggestingMessages(res.data.isSuggestingMessages || false);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getSuggestionsStatus();
+  },[]);
 
   const onSubmit=async(data:z.infer<typeof formSchema>)=>{
     setIsSubmitting(true);
@@ -70,7 +85,7 @@ const Page = () => {
   const suggestMessages=useCallback(async()=>{
     setIsGettingSuggestions(true);
     try {
-      const res=await axios.get<IApiResponse>('/api/suggest-messages');
+      const res=await axios.get<IApiResponse>('/api/get-suggestions');
       if(res.status===200 && res.data.success){
         const suggestions=res.data.message;
         const temp= suggestions.split('||')
@@ -136,7 +151,9 @@ const Page = () => {
       </div>
 
       {/* get suggestions */}
-      <div className="w-5/6 md:w-3/4 lg:w-1/2 mx-auto mb-10">
+      {
+        isSuggestingMessages ? 
+        <div className="w-5/6 md:w-3/4 lg:w-1/2 mx-auto mb-10">
         <Card className="w-full">
           <CardHeader>
             <Button onClick={suggestMessages} className='w-40'>Suggest messages</Button>
@@ -157,7 +174,8 @@ const Page = () => {
             }
           </CardContent>
         </Card>
-      </div>
+      </div> : null
+      }
     </div>
   )
 }

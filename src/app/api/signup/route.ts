@@ -48,6 +48,7 @@ export async function POST(req:Request) {
         verifyCodeExpiry:expiryDate,
         isVerified:false,
         isAcceptingMessages:true,
+        isSuggestingMessages:true,
         messages:[],
       })
       await newUser.save();

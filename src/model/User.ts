@@ -25,6 +25,7 @@ export interface User extends Document{
   verifyCodeExpiry:Date;
   isVerified:boolean;
   isAcceptingMessages:boolean;
+  isSuggestingMessages:boolean;
   messages:Message[];
 }
 
@@ -59,6 +60,10 @@ const UserSchema:Schema<User>=new Schema({
     default:false
   },
   isAcceptingMessages:{
+    type:Boolean,
+    default:true
+  },
+  isSuggestingMessages:{
     type:Boolean,
     default:true
   },

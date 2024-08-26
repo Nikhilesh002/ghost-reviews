@@ -19,7 +19,8 @@ import { useForm } from 'react-hook-form';
 const Page = () => {
   const [messages,setMessages]=useState<Message[]>([]);
   const [isLoading,setIsLoading]=useState(false);
-  const [isSwitchLoading,setIsSwitchLoading]=useState(false);
+  const [isAcceptSwitchLoading,setIsAcceptSwitchLoading]=useState(false);
+  const [isSuggestSwitchLoading,setIsSuggestSwitchLoading]=useState(false);
 
   const {toast}=useToast();
 
@@ -36,9 +37,10 @@ const Page = () => {
   const {register,watch,setValue }=form;
 
   const acceptMessages=watch('acceptMessages');
+  const suggestMessages=watch('suggestMessages');
 
   const fetchAcceptMessageStatus=useCallback(async()=>{
-    setIsSwitchLoading(true);
+    setIsAcceptSwitchLoading(true);
     try {
       const res=await axios.get<IApiResponse>('/api/accept-messages');
       setValue('acceptMessages',res.data.isAcceptingMessages);
@@ -51,13 +53,36 @@ const Page = () => {
         variant:"destructive"
       })
     } finally{
-      setIsSwitchLoading(false);
+      setIsAcceptSwitchLoading(false);
+    }
+  },[setValue,toast]);
+
+  const fetchSuggestMessagesStatus=useCallback(async()=>{
+    setIsSuggestSwitchLoading(true);
+    try {
+      const res=await axios.post('/api/suggestion-status',{type:"see"});
+      if(res.data.success){
+        setValue('suggestMessages',res.data.isSuggestingMessages);
+      }
+      else{
+        throw new Error(res.data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      const axiosError=error as AxiosError<IApiResponse>;
+      toast({
+        title:"Error",
+        description:axiosError.response?.data.message || "Failed to fetch message settings",
+        variant:"destructive"
+      })
+    } finally{
+      setIsSuggestSwitchLoading(false);
     }
   },[setValue,toast]);
 
   const fetchMessages=useCallback(async(refresh:boolean=false)=>{
     setIsLoading(true);
-    setIsSwitchLoading(true);
+    setIsAcceptSwitchLoading(true);
     try {
       const res=await axios.get<IApiResponse>('/api/get-messages');
       setMessages(res.data.messages || []);
@@ -77,7 +102,7 @@ const Page = () => {
       })
     } finally{
       setIsLoading(false);
-      setIsSwitchLoading(false);
+      setIsAcceptSwitchLoading(false);
     }
   },[setIsLoading,setMessages,toast]);
 
@@ -85,17 +110,24 @@ const Page = () => {
     if(!session || !session.data?.user) return;
     fetchAcceptMessageStatus();
     fetchMessages();
-  }, [session,setValue,fetchAcceptMessageStatus,fetchMessages]);
+    fetchSuggestMessagesStatus();
+  }, [session,setValue,fetchAcceptMessageStatus,fetchSuggestMessagesStatus,fetchMessages]);
 
-  // handle switch change
-  const handleSwitchChange=async()=>{
-    setIsSwitchLoading(true);
+  // handle accept switch change
+  const handleAcceptMessagesSwitchChange=async()=>{
+    setIsAcceptSwitchLoading(true);
+    setIsLoading(true);
     try{
       const res=await axios.post<IApiResponse>('/api/accept-messages');
-      setValue('acceptMessages',!acceptMessages);
-      toast({
-        title:res.data.message
-      })
+      if(res.data.success){
+        setValue('acceptMessages',!isAcceptSwitchLoading);
+        toast({
+          title:res.data.message
+        })
+      }
+      else{
+        throw new Error(res.data.message);
+      }
     } catch (error) {
       console.error(error);
       const axiosError=error as AxiosError<IApiResponse>;
@@ -106,7 +138,34 @@ const Page = () => {
       })
     } finally{
       setIsLoading(false);
-      setIsSwitchLoading(false);
+      setIsAcceptSwitchLoading(false);
+    }
+  }
+
+  // handle suggest switch change
+  const handleSuggestMessagesSwitchChange=async()=>{
+    setIsSuggestSwitchLoading(true);
+    try{
+      const res=await axios.post<IApiResponse>('/api/suggestion-status',{type:"toggle"});
+      if(res.data.success){
+        setValue('suggestMessages',!suggestMessages);
+        toast({
+          title:res.data.message
+        })
+      }
+      else{
+        throw new Error(res.data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      const axiosError=error as AxiosError<IApiResponse>;
+      toast({
+        title:"Error",
+        description:axiosError.response?.data.message || "Failed to fetch message settings",
+        variant:"destructive"
+      })
+    } finally{
+      setIsSuggestSwitchLoading(false);
     }
   }
 
@@ -137,18 +196,32 @@ const Page = () => {
         </div>
       </div>
 
-      <div className="mb-4">
-        <Switch
-          {...register('acceptMessages')}
-          checked={acceptMessages}
-          onCheckedChange={handleSwitchChange}
-          disabled={isSwitchLoading}
-        />
-        <span className="ml-2">
-          Accept Messages: {acceptMessages ? 'On' : 'Off'}
-        </span>
+      <div className="flex flex-wrap gap-14">
+        <div className="">
+          <Switch
+            {...register('acceptMessages')}
+            checked={acceptMessages}
+            onCheckedChange={handleAcceptMessagesSwitchChange}
+            disabled={isAcceptSwitchLoading}
+          />
+          <span className="ml-2">
+            Accept Messages: {acceptMessages ? 'On' : 'Off'}
+          </span>
+        </div>
+
+        <div className="">
+          <Switch
+            {...register('suggestMessages')}
+            checked={suggestMessages}
+            onCheckedChange={handleSuggestMessagesSwitchChange}
+            disabled={isSuggestSwitchLoading}
+          />
+          <span className="ml-2">
+            AI suggestions: {suggestMessages ? 'On' : 'Off'}
+          </span>
+        </div>
       </div>
-      <Separator />
+      <Separator className='mt-4' />
       <Button
         className="mt-4"
         variant="outline"

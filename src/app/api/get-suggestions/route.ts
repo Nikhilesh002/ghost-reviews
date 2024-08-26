@@ -1,5 +1,6 @@
 import { getSuggestions } from "@/helpers/getSuggestions";
 
+// to get AI suggestions
 export async function GET() {
   try {
     const aiRes=await getSuggestions();
