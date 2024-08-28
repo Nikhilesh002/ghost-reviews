@@ -12,7 +12,9 @@ export async function POST(req:Request) {
     if(!session || !user){
       return Response.json({ success: false, message: "Not authorised" },{status:401});
     }
-    const userId=user._id
+    if(!user.isAcceptingMessages){
+      return Response.json({ success: false, message: "User is not accepting messages" },{status:401});
+    }
     // const {acceptMessages}=await req.json();
     const userByUsername=await UserModel.findOne({username:user.name});
     if(!userByUsername){
