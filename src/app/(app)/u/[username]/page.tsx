@@ -48,9 +48,10 @@ const Page = () => {
   const {register,handleSubmit,setValue}=form;
 
   useEffect(()=>{
+    if(!username) return;
     const getStatus=async()=>{
       try {
-        const acceptRes = await axios.get<IApiResponse>('/api/accept-messages');
+        const acceptRes = await axios.get<IApiResponse>(`/api/accept-messages?username=${username}`);
         if(acceptRes.data.success){
           if(!acceptRes.data.isAcceptingMessages){
             setIsAcceptingMessages(false);
@@ -61,7 +62,7 @@ const Page = () => {
           setIsAcceptingMessages(false);
           return;
         }
-        const suggestionRes=await axios.post<IApiResponse>('/api/suggestion-status',{type:"see"});
+        const suggestionRes=await axios.post<IApiResponse>('/api/suggestion-status',{type:"see",username});
         if(suggestionRes.data.success){
           setIsSuggestingMessages(suggestionRes.data.isSuggestingMessages || false);
         }
@@ -70,7 +71,7 @@ const Page = () => {
       }
     }
     getStatus();
-  },[]);
+  },[username]);
 
   const onSubmit=async(data:z.infer<typeof formSchema>)=>{
     setIsSubmitting(true);

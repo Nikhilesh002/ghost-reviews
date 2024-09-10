@@ -72,7 +72,8 @@ const Page = () => {
   const fetchAcceptMessageStatus = useCallback(async () => {
     setIsAcceptSwitchLoading(true);
     try {
-      const res = await axios.get<IApiResponse>('/api/accept-messages');
+      if(!session || !session.data || !session.data.user) return;
+      const res = await axios.get<IApiResponse>(`/api/accept-messages?username=${session?.data?.user?.username}`);
       if (res.data.success) {
         setValue('acceptMessages', res.data.isAcceptingMessages);
       }
@@ -92,7 +93,8 @@ const Page = () => {
   const fetchSuggestMessagesStatus = useCallback(async () => {
     setIsSuggestSwitchLoading(true);
     try {
-      const res = await axios.post('/api/suggestion-status', { type: "see" });
+      if(!session || !session.data || !session.data.user) return;
+      const res = await axios.post('/api/suggestion-status', { type: "see",username:session?.data?.user?.username });
       if (res.data.success) {
         setValue('suggestMessages', res.data.isSuggestingMessages);
       } else {
