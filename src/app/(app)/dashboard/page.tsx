@@ -142,7 +142,7 @@ const Page = () => {
     fetchSuggestMessagesStatus();
     fetchAcceptMessageStatus();
     fetchMessages();
-  }, [session]);
+  }, [session, fetchAcceptMessageStatus, fetchMessages, fetchSuggestMessagesStatus]);
 
   // Handle Accept Switch Change
   const handleAcceptMessagesSwitchChange = useCallback(async () => {
@@ -209,7 +209,7 @@ const Page = () => {
           <Switch
             {...register('acceptMessages')}
             checked={acceptMessages}
-            onCheckedChange={async () => await handleAcceptMessagesSwitchChange()}
+            onCheckedChange={async () => {await handleAcceptMessagesSwitchChange()}}
             disabled={isAcceptSwitchLoading}
           />
           <span className="ml-2">
@@ -221,7 +221,7 @@ const Page = () => {
           <Switch
             {...register('suggestMessages')}
             checked={suggestMessages}
-            onCheckedChange={async () => await handleSuggestMessagesSwitchChange()}
+            onCheckedChange={async () => {await handleSuggestMessagesSwitchChange()}}
             disabled={isSuggestSwitchLoading || !acceptMessages} // Disable if accepting messages is off
           />
           <span className="ml-2">
