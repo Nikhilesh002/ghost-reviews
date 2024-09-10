@@ -88,7 +88,7 @@ const Page = () => {
     } finally {
       setIsAcceptSwitchLoading(false);
     }
-  }, [setValue, toast]);
+  }, [setValue, toast,session]);
 
   const fetchSuggestMessagesStatus = useCallback(async () => {
     setIsSuggestSwitchLoading(true);
@@ -111,7 +111,7 @@ const Page = () => {
     } finally {
       setIsSuggestSwitchLoading(false);
     }
-  }, [setValue, toast]);
+  }, [setValue, toast,session]);
 
   const fetchMessages = useCallback(async (refresh: boolean = false) => {
     setIsLoading(true);
