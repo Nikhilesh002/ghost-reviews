@@ -176,16 +176,15 @@ const Page = () => {
                 </CardHeader>
                 <CardContent className='flex flex-col gap-2'>
                   {
-                    messages.length!==0 ? messages?.map((message,index)=>(
-                      <Button key={index} onClick={()=>setValue("content",message)} className='text-wrap' variant="outline">{message}</Button>
-                    )) : 
-                      isGettingSuggestions ? 
-                        <div className="flex flex-col gap-2">
-                          <Skeleton className="w-full h-[40px] rounded-xl" />
-                          <Skeleton className="w-full h-[40px] rounded-xl" />
-                          <Skeleton className="w-full h-[40px] rounded-xl" />
-                        </div>
-                        : <p>Click above button to generate messages</p>
+                    isGettingSuggestions ? 
+                      <div className="flex flex-col gap-2">
+                        <Skeleton className="w-full h-[40px] rounded-xl" />
+                        <Skeleton className="w-full h-[40px] rounded-xl" />
+                        <Skeleton className="w-full h-[40px] rounded-xl" />
+                      </div> :
+                      messages.length!==0 ? messages?.map((message,index)=>(
+                        <Button key={index} onClick={()=>setValue("content",message)} className='text-wrap' variant="outline">{message}</Button>
+                      )) : <p>Click above button to generate messages</p>
                   }
                 </CardContent>
               </Card>

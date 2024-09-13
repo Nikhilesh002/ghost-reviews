@@ -2,8 +2,9 @@ import axios from "axios";
 
 
 export async function getSuggestions(){
-  const prompt = "Create 3 unique, open-ended questions for an anonymous social messaging platform. Each question should spark positive, engaging conversations and be under 100 characters. Use ' || ' between questions. Use emojis at the end of each question . Avoid personal or sensitive topics. Do not number the questions and never include an outro or intro or '\n' character. Keep the total response under 300 characters. "
-    
+
+  const prompt = "Think out of the box and generate 3 unique and diverse open-ended questions for an anonymous social messaging platform. Each question should be distinct from the others, encouraging different types of positive and engaging conversations with suitable emojis. Use ' || ' to separate. From these, select 3 varied questions.Do not number the questions and never include an outro or intro or '\n' character. Keep the total response under 300 characters."
+
     const aiRes = await axios.post(`${process.env.AI_BASE_URL}`,{
       "model": `${process.env.MODEL}`,
       "messages": [
@@ -16,7 +17,7 @@ export async function getSuggestions(){
           "content": prompt
         }
       ],
-      "max_tokens": 256,
+      "max_tokens": 128,
       "frequency_penalty": 0,
       "logit_bias": {"2435":-100, "640":-100},
       "logprobs": true,
@@ -24,10 +25,10 @@ export async function getSuggestions(){
       "n": 1,
       "presence_penalty": 0,
       "response_format": { "type": "text" },
-      "stop": null,
+      // "stop": null,
       "stream": false,
-      "temperature": 1.0,
-      "top_p": 1
+      "temperature": 0.9,
+      "top_p": 0.9
     }, {
     headers: {
       'Content-Type': 'application/json',

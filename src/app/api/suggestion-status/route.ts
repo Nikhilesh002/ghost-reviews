@@ -29,6 +29,6 @@ export async function POST(req:Request){
     }
   } catch (error) {
     console.error("Some error occured",error);
-    return Response.json({ success: false, message: "Failed to toggle suggestions" },{status:500});
+    return Response.json({ success: false, message: "Error in suggestions api" },{status:500});
   }
 }
