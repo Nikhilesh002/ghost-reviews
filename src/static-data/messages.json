@@ -1,37 +1,37 @@
 [
   {
-    "title": "Message from Friend4Ever",
-    "content": "Can we catch up this weekend?",
-    "received": "5 minutes ago"
+    "title": "A Game Changer for Reviews!",
+    "content": "Can we catch up this weekend? The review process was so easy!",
+    "role": "social media influencer"
   },
   {
-    "title": "Message from WorkBuddy",
-    "content": "Don’t forget about the team meeting tomorrow!",
-    "received": "3 hours ago"
+    "title": "Streamlined Feedback for Success",
+    "content": "Don’t forget about the team meeting tomorrow! This app streamlined our feedback collection.",
+    "role": "CEO"
   },
   {
-    "title": "Message from TravelEnthusiast",
-    "content": "Have you planned your next vacation yet?",
-    "received": "2 days ago"
+    "title": "Vacation Planning Made Simple",
+    "content": "Have you planned your next vacation yet? Using this app made gathering reviews a breeze!",
+    "role": "travel blogger"
   },
   {
-    "title": "Message from FitnessGuru",
-    "content": "Check out this new workout routine I found!",
-    "received": "4 days ago"
+    "title": "Effortless Feedback Collection",
+    "content": "Check out this new workout routine I found! Collecting feedback was never easier.",
+    "role": "fitness coach"
   },
   {
-    "title": "Message from User123",
-    "content": "Hey, how are you doing today?",
-    "received": "10 minutes ago"
+    "title": "Transforming Review Gathering",
+    "content": "Hey, how are you doing today? This app transformed how I gather reviews!",
+    "role": "startup founder"
   },
   {
-    "title": "Message from SecretAdmirer",
-    "content": "I really liked your recent post!",
-    "received": "2 hours ago"
+    "title": "Straightforward and Effective",
+    "content": "I really liked your recent post! The review process was so straightforward.",
+    "role": "content creator"
   },
   {
-    "title": "Message from MysteryGuest",
-    "content": "Do you have any book recommendations?",
-    "received": "1 day ago"
+    "title": "Simplified Feedback for Authors",
+    "content": "Do you have any book recommendations? This app simplified my feedback process.",
+    "role": "author"
   }
 ]
