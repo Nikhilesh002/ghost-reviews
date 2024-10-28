@@ -1,21 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-export interface Message extends Document{
-  content:string;
-  createdAt:Date;
-}
-
-const MessageSchema:Schema<Message>=new Schema({
-  content:{
-    type:String,
-    required:true
-  },
-  createdAt:{
-    type:Date,
-    required:true,
-    default:Date.now
-  }
-})
 
 export interface User extends Document{
   username:string;
@@ -24,9 +8,7 @@ export interface User extends Document{
   verifyCode:string;
   verifyCodeExpiry:Date;
   isVerified:boolean;
-  isAcceptingMessages:boolean;
-  isSuggestingMessages:boolean;
-  messages:Message[];
+  forms:Schema.Types.ObjectId[]
 }
 
 const UserSchema:Schema<User>=new Schema({
@@ -59,15 +41,7 @@ const UserSchema:Schema<User>=new Schema({
     type:Boolean,
     default:false
   },
-  isAcceptingMessages:{
-    type:Boolean,
-    default:true
-  },
-  isSuggestingMessages:{
-    type:Boolean,
-    default:true
-  },
-  messages:[MessageSchema]
+  forms:[{type:Schema.Types.ObjectId,ref:"form"}]
 })
 
 const UserModel=(mongoose.models.User as mongoose.Model<User>) || (mongoose.model<User>("User",UserSchema));

@@ -27,14 +27,14 @@ const Navbar = () => {
         </Link>
 
         {session && session.status==="authenticated" && session.data ? (
-          <>
+          <div className="space-x-3 text-lg">
             <span className="mr-4">
               Welcome, {session?.data?.user.username || session?.data?.user.email}
             </span>
             <Button onClick={() => signOut()} className="w-full md:w-auto bg-slate-100 text-black" variant='outline'>
               Logout
             </Button>
-          </>
+          </div>
         ) : (
           <Link href="/signin">
             <Button className="w-full md:w-auto bg-slate-100 text-black" variant={'outline'}>Login</Button>

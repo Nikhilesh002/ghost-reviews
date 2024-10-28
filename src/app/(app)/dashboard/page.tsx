@@ -193,45 +193,45 @@ const Page = () => {
   }
 
   return (
-    <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl">
-      <h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
+    <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white dark:bg-gray-800 rounded w-full max-w-6xl">
+      <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">User Dashboard</h1>
 
       <div className="mb-4">
-        <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link</h2>
-        <div className="flex items-center ">
-          <div className="bg-gray-50 text-blue-500 underline rounded w-full p-2 mr-2">
-            <Link href={profileUrl} className="">{profileUrl}</Link>
+        <h2 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">Copy Your Unique Link</h2>
+        <div className="flex items-center">
+          <div className="bg-gray-50 dark:bg-gray-700 text-blue-500 dark:text-blue-400 underline rounded w-full p-2 mr-2">
+            <Link href={profileUrl} className="hover:text-blue-600 dark:hover:text-blue-300">{profileUrl}</Link>
           </div>
           <Button onClick={copyToClipboard}>Copy</Button>
         </div>
       </div>
 
       <div className="flex flex-wrap gap-14">
-        <div className="">
+        <div className="flex items-center">
           <Switch
             {...register('acceptMessages')}
             checked={acceptMessages}
             onCheckedChange={async () => {await handleAcceptMessagesSwitchChange()}}
             disabled={isAcceptSwitchLoading}
           />
-          <span className="ml-2">
+          <span className="ml-2 text-gray-700 dark:text-gray-300">
             Accept Messages: {acceptMessages ? 'On' : 'Off'}
           </span>
         </div>
 
-        <div className="">
+        <div className="flex items-center">
           <Switch
             {...register('suggestMessages')}
             checked={suggestMessages}
             onCheckedChange={async () => {await handleSuggestMessagesSwitchChange()}}
-            disabled={isSuggestSwitchLoading || !acceptMessages} // Disable if accepting messages is off
+            disabled={isSuggestSwitchLoading || !acceptMessages}
           />
-          <span className="ml-2">
+          <span className="ml-2 text-gray-700 dark:text-gray-300">
             AI suggestions: {suggestMessages ? 'On' : 'Off'}
           </span>
         </div>
       </div>
-      <Separator className='mt-4' />
+      <Separator className='mt-4 bg-gray-200 dark:bg-gray-600' />
       <Button
         className="mt-4"
         variant="outline"
@@ -256,7 +256,7 @@ const Page = () => {
             />
           ))
         ) : (
-          <p>No messages to display.</p>
+          <p className="text-gray-600 dark:text-gray-400">No messages to display.</p>
         )}
       </div>
     </div>
