@@ -70,7 +70,7 @@ export default function LandingPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="text-gray-700 dark:text-gray-300">
-              Seamlessly manage feedback visibility and responses. Tailor the platform to your team's specific needs.
+              Seamlessly manage feedback visibility and responses. Tailor the platform to your team&apos;s specific needs.
             </CardContent>
           </Card>
         </div>

@@ -19,10 +19,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { X } from "lucide-react";
-import { Message } from "@/model/User.model";
-import { useToast } from "./ui/use-toast";
+import { Message } from "@/model/Messages.model";
+import { useToast } from "../ui/use-toast";
 import axios from "axios";
 import { IApiResponse } from "@/types/IApiResponse";
 

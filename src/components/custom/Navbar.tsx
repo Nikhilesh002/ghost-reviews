@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { useSession,signOut  } from "next-auth/react";
 // import { User } from "next-auth";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import logo from '@/app/icon.png'
-import { ModeToggle } from "./ui/mode-toggle";
+import { ModeToggle } from "@/components/ui/mode-toggle";
 
 const Navbar = () => {
 
