@@ -1,9 +1,9 @@
-import AuthProvider from "@/context/AuthProvider";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import Providers from "@/Providers";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -29,9 +29,9 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <AuthProvider>
+        <Providers>
           {children}
-        </AuthProvider>
+        </Providers>
         <Toaster />
       </body>
     </html>
