@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/components/ui/use-toast';
-import { Message } from '@/model/User';
+import { Message } from '@/model/User.model';
 import { AcceptMessageSchema } from '@/schemas/acceptMessageSchema';
 import { IApiResponse } from '@/types/IApiResponse';
 import { zodResolver } from '@hookform/resolvers/zod';

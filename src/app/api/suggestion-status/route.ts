@@ -1,4 +1,4 @@
-import UserModel from "@/model/User";
+import UserModel from "@/model/User.model";
 import { getServerSession } from "next-auth";
 
 export const dynamic = 'force-dynamic';
