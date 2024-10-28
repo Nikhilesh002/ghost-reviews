@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document, Model, Schema } from "mongoose";
 
 
 export interface User extends Document{
@@ -41,9 +41,9 @@ const UserSchema:Schema<User>=new Schema({
     type:Boolean,
     default:false
   },
-  forms:[{type:Schema.Types.ObjectId,ref:"form"}]
+  forms:[{type:Schema.Types.ObjectId,ref:"Form"}]
 })
 
-const UserModel=(mongoose.models.User as mongoose.Model<User>) || (mongoose.model<User>("User",UserSchema));
+const UserModel:Model<User>=(mongoose.models?.User as mongoose.Model<User>) || (mongoose.model<User>("User",UserSchema));
 
 export default UserModel;

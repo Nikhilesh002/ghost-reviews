@@ -1,13 +1,18 @@
 import mongoose, { Document, Schema } from "mongoose";
+import { Model } from "mongoose";
 
 export interface Form extends Document{
+  name:String;
   isAcceptingMessages:boolean;
   isSuggestingMessages:boolean;
   context:String;
-  messages:Schema.Types.ObjectId[]
+  messages:Schema.Types.ObjectId[];
+  createdAt:Date;
+  formExpiry:Date;
 }
 
 const FormSchema:Schema<Form>=new Schema({
+  name:{type:String},
   isAcceptingMessages:{
     type:Boolean,
     default:true
@@ -17,9 +22,19 @@ const FormSchema:Schema<Form>=new Schema({
     default:true
   },
   context:{type:String, required:true},
-  messages:[{type:Schema.Types.ObjectId,ref:"Message"}]
+  messages:[{type:Schema.Types.ObjectId,ref:"Message"}],
+  createdAt:{
+    type:Date,
+    required:true,
+    default:Date.now
+  },
+  formExpiry:{
+    type:Date,
+    required:true,
+    default:Date.now
+  },
 })
 
-const FormModel=(mongoose.models.Form as mongoose.Model<Form>) || (mongoose.model<Form>("Form",FormSchema));
+const FormModel:Model<Form>=(mongoose.models?.Form as Model<Form>) || (mongoose.model<Form>("Form",FormSchema));
 
 export default FormModel;

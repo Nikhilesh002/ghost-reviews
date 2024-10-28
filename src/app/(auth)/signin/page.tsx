@@ -60,7 +60,7 @@ const Page = () => {
         //     }
         // } else if (res?.ok) {
             // Redirect the user if sign-in was successful
-            router.push('/dashboard');
+            router.push('/u');
         // } else {
         //     // Handle unexpected responses
         //     toast({

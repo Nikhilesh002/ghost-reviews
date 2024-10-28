@@ -1,4 +1,4 @@
-import UserModel from "@/model/User.model";
+import FormModel from "@/model/Forms.model";
 import { getServerSession } from "next-auth";
 
 export const dynamic = 'force-dynamic';
@@ -6,26 +6,26 @@ export const dynamic = 'force-dynamic';
 // to toggle or get suggestion status
 export async function POST(req:Request){
   try {
-    const {type,username}=await req.json();
+    const {type,formId}=await req.json();
     if(type==="toggle"){
       const session=await getServerSession();
       if(!session || !session.user){
         return Response.json({ success: false, message: "Not authorised" },{status:401});
       }
-      const dbUser=await UserModel.findOne({username:session.user.name});
-      if(!dbUser){
-        return Response.json({ success: false,message: "User not found" },{status:402});
+      const form=await FormModel.findOne({_id:formId});
+      if(!form){
+        return Response.json({ success: false, message: "Form not found" },{status:404});
       }
-      dbUser.isSuggestingMessages=!dbUser.isSuggestingMessages;
-      dbUser.save();
+      form.isSuggestingMessages=!form.isSuggestingMessages;
+      form.save();
       return Response.json({ success: true,message: "Toggled AI suggestions" },{status:200});
     }
     else if(type==="see"){
-      const dbUser=await UserModel.findOne({username});
-      if(!dbUser){
-        return Response.json({ success: false,message: "User not found" },{status:402});
+      const form=await FormModel.findOne({_id:formId});
+      if(!form){
+        return Response.json({ success: false, message: "Form not found" },{status:404});
       }
-      return Response.json({ success: true,message: "AI suggestions status",isSuggestingMessages:dbUser.isSuggestingMessages },{status:200});
+      return Response.json({ success: true,message: "AI suggestions status",isSuggestingMessages:form.isSuggestingMessages },{status:200});
     }
   } catch (error) {
     console.error("Some error occured",error);

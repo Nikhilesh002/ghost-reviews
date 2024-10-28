@@ -1,9 +1,9 @@
 import axios from "axios";
 
 
-export async function getSuggestions(){
+export async function getSuggestions(context:string){
 
-  const prompt = "Think out of the box and generate 3 unique and diverse open-ended questions for an anonymous social messaging platform. Each question should be distinct from the others, encouraging different types of positive and engaging conversations with suitable emojis. Use ' || ' to separate. From these, select 3 varied questions.Do not number the questions and never include an outro or intro or '\n' character. Keep the total response under 300 characters."
+  const prompt = "Think out of the box and generate 3 unique and diverse open-ended questions for an anonymous social messaging platform. Each question should be distinct from the others, encouraging different types of positive and engaging conversations with suitable emojis. Use ' || ' to separate. From these, select 3 varied questions.Do not number the questions and never include an outro or intro or '\n' character. Keep the total response under 300 characters. Questions have to be related to : "
 
     const aiRes = await axios.post(`${process.env.AI_BASE_URL}`,{
       "model": `${process.env.MODEL}`,
@@ -14,7 +14,7 @@ export async function getSuggestions(){
         },
         {
           "role": "user",
-          "content": prompt
+          "content": prompt + context
         }
       ],
       "max_tokens": 128,

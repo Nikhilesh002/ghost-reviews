@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document, Model, Schema } from "mongoose";
 
 
 export interface Message extends Document{
@@ -18,6 +18,6 @@ const MessageSchema:Schema<Message>=new Schema({
   }
 })
 
-const MessageModel=(mongoose.models.Message as mongoose.Model<Message>) || mongoose.model<Message>("Message",MessageSchema);
+const MessageModel:Model<Message>=(mongoose.models?.Message as Model<Message>) || mongoose.model<Message>("Message",MessageSchema);
 
 export default MessageModel;

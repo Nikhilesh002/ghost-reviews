@@ -186,7 +186,7 @@ const Page = () => {
     return <div>Please login</div>
   }
 
-  const profileUrl = `${window.location.origin}/u/${session?.data?.user?.username}`;
+  const profileUrl = `${window.location.origin}/${session?.data?.user?.username}/formId`;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(profileUrl);
@@ -197,7 +197,13 @@ const Page = () => {
 
   return (
     <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white dark:bg-gray-800 rounded w-full max-w-6xl">
-      <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">User Dashboard</h1>
+
+      <div className="flex justify-between px-2 py-3">
+        <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">User Dashboard</h1>
+        <Link href="/u/create-form">
+          <Button>Create new form</Button>
+        </Link>
+      </div>
 
       <div className="mb-4">
         <h2 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">Copy Your Unique Link</h2>
