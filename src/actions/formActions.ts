@@ -47,10 +47,9 @@ export const createForm= async (username:string,formData:any)=>{
     }
 
     const newForm= new FormModel(formData);
-    await newForm.save();
-
     userExists.forms.push(newForm._id as ObjectId);
-    await userExists.save()
+    
+    await Promise.all([newForm.save(),userExists.save()]);
 
     return {message:"Form Created Successfully"};
 

@@ -21,16 +21,16 @@ const Page=async()=> {
   }
 
   const res=await getAllForms(session?.user.name ?? "");
-  
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between px-2 py-3">
         <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">Your Forms</h1>
-        <CreateFormDialog/>
+        <CreateFormDialog username={session?.user.name ?? ""}/>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        { res.success && res.forms?.map((form:Form) => (
+        { res.success && res?.forms?.length!==0 ? res.forms?.map((form:Form) => (
           <Link key={form._id as string} href={`/u/form/${form._id}`} >
             <Card className="bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow">
               <CardHeader>
@@ -79,7 +79,7 @@ const Page=async()=> {
               </CardContent>
             </Card>
           </Link>
-        ))}
+        )) : <>You have not created any forms. Please create a form to get reviews</>}
       </div>
     </div>
   )

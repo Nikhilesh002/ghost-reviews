@@ -14,11 +14,10 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
-const CreateForm = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  
-  const { toast } = useToast();
-  const router = useRouter();
+const CreateForm = ({ username, onSuccess }: { username: string; onSuccess: () => void }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { toast } = useToast()
+  const router = useRouter()
 
   const form = useForm<z.infer<typeof createFormSchema>>({
     resolver: zodResolver(createFormSchema),
@@ -31,33 +30,34 @@ const CreateForm = () => {
   })
 
   const onSubmit = async (data: z.infer<typeof createFormSchema>) => {
-    setIsSubmitting(true);
+    setIsSubmitting(true)
 
     try {
-      const timeLeft = Date.now() + (Number(data.formExpiryDays) * 24 + Number(data.formExpiryHrs)) * 60 * 60;
+      const timeLeft = Date.now() + (Number(data.formExpiryDays) * 24 + Number(data.formExpiryHrs)) * 60 * 60
       const formData = {
         context: data.context,
         formExpiry: timeLeft,
         name: data.name,
         isAcceptingMessages: true,
         isSuggestingMessages: true
-      };
-      const res = await createForm("Nikhilesh007", formData);
+      }
+      const res = await createForm(username, formData)
       toast({
         title: res.message
       })
+      onSuccess() // Close the dialog on successful creation
       router.replace("/u")
     } catch (error) {
-      console.error('Unexpected error:', error);
+      console.error("Unexpected error:", error)
       toast({
-        title: 'Unexpected Error',
-        description: 'Failed to create form',
-        variant: 'destructive',
-      });
+        title: "Unexpected Error",
+        description: "Failed to create form",
+        variant: "destructive"
+      })
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   return (
     <div className="flex justify-center items-center mt-5">
@@ -71,10 +71,10 @@ const CreateForm = () => {
                 <FormItem>
                   <FormLabel className="text-gray-700 dark:text-gray-300">Name</FormLabel>
                   <FormControl>
-                    <Input 
-                      type="text" 
-                      placeholder="Name" 
-                      {...field} 
+                    <Input
+                      type="text"
+                      placeholder="Name"
+                      {...field}
                       className="bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                     />
                   </FormControl>
@@ -89,9 +89,9 @@ const CreateForm = () => {
                 <FormItem>
                   <FormLabel className="text-gray-700 dark:text-gray-300">Enter context of this form</FormLabel>
                   <FormControl>
-                    <Textarea 
-                      placeholder="Enter context" 
-                      {...field} 
+                    <Textarea
+                      placeholder="Enter context"
+                      {...field}
                       className="bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                     />
                   </FormControl>
@@ -99,7 +99,7 @@ const CreateForm = () => {
                 </FormItem>
               )}
             />
-            
+
             <div className="space-y-2">
               <p className="text-gray-700 dark:text-gray-300">Expires in</p>
               <div className="flex space-x-3">
@@ -110,10 +110,10 @@ const CreateForm = () => {
                     <FormItem className="flex-1">
                       <FormLabel className="text-gray-700 dark:text-gray-300">Days</FormLabel>
                       <FormControl>
-                        <Input 
-                          type="number" 
-                          placeholder="Days" 
-                          {...field} 
+                        <Input
+                          type="number"
+                          placeholder="Days"
+                          {...field}
                           className="bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                         />
                       </FormControl>
@@ -128,10 +128,10 @@ const CreateForm = () => {
                     <FormItem className="flex-1">
                       <FormLabel className="text-gray-700 dark:text-gray-300">Hours</FormLabel>
                       <FormControl>
-                        <Input 
-                          type="number" 
-                          placeholder="Hours" 
-                          {...field} 
+                        <Input
+                          type="number"
+                          placeholder="Hours"
+                          {...field}
                           className="bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                         />
                       </FormControl>
@@ -141,9 +141,9 @@ const CreateForm = () => {
                 />
               </div>
             </div>
-            
-            <Button 
-              type="submit" 
+
+            <Button
+              type="submit"
               disabled={isSubmitting}
               className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
             >
@@ -152,7 +152,7 @@ const CreateForm = () => {
                   <Loader2 className="mr-1.5 h-5 w-5 animate-spin" /> Please wait
                 </>
               ) : (
-                'Create Form'
+                "Create Form"
               )}
             </Button>
           </form>
@@ -162,4 +162,4 @@ const CreateForm = () => {
   )
 }
 
-export default CreateForm;
+export default CreateForm

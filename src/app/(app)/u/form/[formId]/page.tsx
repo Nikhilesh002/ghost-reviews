@@ -2,19 +2,13 @@ import { getFormReviews } from '@/actions/formActions';
 import {Message} from "@/model/Messages.model"
 import MessagesList from '@/components/custom/MessagesList';
 import ShareReviewLink from '@/components/custom/ShareReviewLink';
+import Toggles from '@/components/custom/toggles';
+import { Separator } from '@/components/ui/separator';
 
 
 async function page({params:{formId}}:{params:{formId:string}}) {
 
-  let messages:Message[];
-
-  try {
-    // Ensure JSON-compatible data structure by stripping non-serializable properties
-    messages = JSON.parse(JSON.stringify(await getFormReviews(formId))) as Message[];
-  } catch (error) {
-    console.error("Error processing messages:", error);
-    messages = [];
-  }
+  const messages= JSON.parse(JSON.stringify(await getFormReviews(formId))) as Message[];
 
 
   return (
@@ -26,6 +20,15 @@ async function page({params:{formId}}:{params:{formId:string}}) {
         <h2 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">Copy Your Unique Link</h2>
         <ShareReviewLink formId={formId} />
       </div>
+
+      <Separator className='mt-2 mb-3' />
+
+      {/* toggles */}
+      <div className="">
+        <Toggles formId={formId}/>
+      </div>
+
+      <Separator className='mt-4' />
 
       <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
         {messages?.length ? (
