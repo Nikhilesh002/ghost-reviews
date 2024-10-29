@@ -1,29 +1,34 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
-import { IApiResponse } from "@/types/IApiResponse";
-import axios, { AxiosError } from "axios";
 import { Loader2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { sendMessage, getMessageSuggestions } from "@/actions/forms";
 
 const formSchema = z.object({
   content: z.string().min(10).max(300),
 });
 
-const ReviewForm = ({ formId, reviewForm }: { formId: string; reviewForm: any }) => {
+const ReviewForm = ({
+  formId,
+  reviewForm,
+  isAcceptingMessages,
+}: {
+  formId: string;
+  reviewForm: any;
+  isAcceptingMessages: boolean;
+}) => {
   const { toast } = useToast();
   const [messages, setMessages] = useState<string[]>([]);
   const [isGettingSuggestions, setIsGettingSuggestions] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [isAcceptingMessages, setIsAcceptingMessages] = useState<boolean>(false);
-  const [isSuggestingMessages, setIsSuggestingMessages] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -31,59 +36,31 @@ const ReviewForm = ({ formId, reviewForm }: { formId: string; reviewForm: any })
   });
   const { register, handleSubmit, setValue } = form;
 
-  useEffect(() => {
-    const getStatus = async () => {
-      try {
-        const acceptRes = await axios.get<IApiResponse>(`/api/accept-messages?formId=${formId}`);
-        setIsAcceptingMessages(acceptRes.data.isAcceptingMessages || false);
-        const suggestionRes = await axios.post<IApiResponse>('/api/suggestion-status', {
-          type: "see",
-          formId,
-        });
-        setIsSuggestingMessages(suggestionRes.data.isSuggestingMessages || false);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    getStatus();
-  }, [formId]);
-
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
-    try {
-      const res = await axios.post<IApiResponse>('/api/send-message', { ...data, formId });
-      if (res.status === 200 && res.data.success) {
-        toast({ title: res.data.message });
-        setValue("content", "");
-      }
-    } catch (error) {
-      const axiosError = error as AxiosError<IApiResponse>;
-      toast({
-        title: "Error",
-        description: axiosError.response?.data.message || "Failed to generate message suggestions",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
+    const { success } = await sendMessage(formId, data.content);
+    if (success) {
+      toast({ title: "Message sent" });
+      setValue("content", "");
     }
+    setIsSubmitting(false);
   };
 
   const suggestMessages = useCallback(async () => {
     setIsGettingSuggestions(true);
-    try {
-      const res = await axios.post<IApiResponse>('/api/get-suggestions', { formId });
-      setMessages(res.data.message.split("||"));
-    } catch (error) {
-      const axiosError = error as AxiosError<IApiResponse>;
+    const res = await getMessageSuggestions(reviewForm.context);
+    if (!res.success) {
       toast({
-        title: "Error",
-        description: axiosError.response?.data.message || "Failed to generate message suggestions",
+        title: "Error getting AI suggestions",
         variant: "destructive",
       });
-    } finally {
       setIsGettingSuggestions(false);
+      return;
     }
-  }, [formId, toast]);
+    setMessages(res.messages.split("||"));
+    toast({ title: "Fetched AI suggestions" });
+    setIsGettingSuggestions(false);
+  }, [reviewForm.context, toast]);
 
   return (
     <div>
@@ -107,35 +84,33 @@ const ReviewForm = ({ formId, reviewForm }: { formId: string; reviewForm: any })
             </Card>
           </div>
 
-          {isSuggestingMessages && (
-            <div className="w-5/6 md:w-3/4 lg:w-1/2 mx-auto mb-10">
-              <Card className="w-full">
-                <CardHeader>
-                  <Button onClick={suggestMessages} className="w-40">Suggest messages</Button>
-                  <CardDescription>Get auto-generated suggestions from AI and click to select</CardDescription>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-2">
-                  {isGettingSuggestions ? (
-                    <div className="flex flex-col gap-2">
-                      <Skeleton className="w-full h-[40px] rounded-xl" />
-                      <Skeleton className="w-full h-[40px] rounded-xl" />
-                      <Skeleton className="w-full h-[40px] rounded-xl" />
-                    </div>
+          <div className="w-5/6 md:w-3/4 lg:w-1/2 mx-auto mb-10">
+            <Card className="w-full">
+              <CardHeader>
+                <Button onClick={suggestMessages} className="w-40">Suggest messages</Button>
+                <CardDescription>Get auto-generated suggestions from AI and click to select</CardDescription>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-2">
+                {isGettingSuggestions ? (
+                  <div className="flex flex-col gap-2">
+                    <Skeleton className="w-full h-[40px] rounded-xl" />
+                    <Skeleton className="w-full h-[40px] rounded-xl" />
+                    <Skeleton className="w-full h-[40px] rounded-xl" />
+                  </div>
+                ) : (
+                  messages.length !== 0 ? (
+                    messages.map((message, index) => (
+                      <Button key={index} onClick={() => setValue("content", message)} variant="outline">
+                        {message}
+                      </Button>
+                    ))
                   ) : (
-                    messages.length !== 0 ? (
-                      messages.map((message, index) => (
-                        <Button key={index} onClick={() => setValue("content", message)} variant="outline">
-                          {message}
-                        </Button>
-                      ))
-                    ) : (
-                      <p>Click above button to generate messages</p>
-                    )
-                  )}
-                </CardContent>
-              </Card>
-            </div>
-          )}
+                    <p>Click above button to generate messages</p>
+                  )
+                )}
+              </CardContent>
+            </Card>
+          </div>
         </>
       ) : (
         <p>User is not accepting messages</p>

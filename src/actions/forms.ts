@@ -1,10 +1,11 @@
 "use server"
 
+import { getAISuggestions } from "@/helpers/getAISuggestions";
 import dbConnect from "@/lib/dbConnect";
 import FormModel from "@/model/Forms.model";
-import MessageModel from "@/model/Messages.model";
+import MessageModel, { Message } from "@/model/Messages.model";
 import UserModel from "@/model/User.model"
-import mongoose,{ ObjectId } from "mongoose";
+import { ObjectId } from "mongoose";
 
 
 export const getAllForms=async (username:string)=>{
@@ -91,6 +92,71 @@ export const getFormInfo= async(formId:string)=>{
   } catch (error) {
     console.error(error)
     return {message:"Failed to get form info"}
+  }
+}
+
+
+export const getFormAcceptStatus=async (formId:string)=>{
+  await dbConnect();
+  try {
+    const formInfo=await FormModel.findOne({_id:formId}).lean();
+    if(!formInfo){
+      return {success:false};
+    }
+    return {success:true,isAcceptingMessages:formInfo.isAcceptingMessages}
+  } catch (error) {
+    console.error(error)
+    return {success:false,message:"Failed to get form accept status"}
+  }
+}
+
+
+
+export const toggleFormAcceptStatus=async (formId:string)=>{
+  await dbConnect();
+  try {
+    const formInfo=await FormModel.findOne({_id:formId}).lean();
+    if(!formInfo){
+      return {success:false};
+    }
+    formInfo.isAcceptingMessages=!formInfo.isAcceptingMessages;
+    await formInfo.save();
+
+    return {success:true}
+  } catch (error) {
+    console.error(error)
+    return {success:false,message:"Failed to get form accept status"}
+  }
+}
+
+
+export const sendMessage=async (formId:string,content:string)=>{
+  await dbConnect();
+  try {
+    const formInfo=await FormModel.findOne({_id:formId});
+    if(!formInfo){
+      return {success:false};
+    }
+    const newMessage= new MessageModel({content});
+    formInfo.messages.push(newMessage._id as ObjectId);
+    await Promise.all([formInfo.save(),newMessage.save()]);
+
+    return {success:true,isAcceptingMessages:formInfo?.isAcceptingMessages ?? false}
+  } catch (error) {
+    console.error(error)
+    return {success:false,message:"Failed to get form accept status"}
+  }
+}
+
+
+
+export const getMessageSuggestions=async (context:string)=>{
+  try {
+    const res= await getAISuggestions(context);
+    return {success:true, messages:res.data.choices[0].message.content }
+  } catch (error) {
+    console.error(error)
+    return {success:false,message:"Failed to get form accept status"}
   }
 }
 

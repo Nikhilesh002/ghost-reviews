@@ -1,11 +1,13 @@
 import { Form } from "@/model/Forms.model";
-import { Message } from "@/model/User.model";
+import { Message } from "@/model/Messages.model";
+import { User } from "@/model/User.model";
 
-export interface IApiResponse{
+export interface IResponse{
   success:boolean,
   message:string,
   isAcceptingMessages?:boolean,
   isSuggestingMessages?:boolean,
   messages?:Message[],
-  forms?:Form[]
+  forms?:Form[],
+  User?:User
 }
