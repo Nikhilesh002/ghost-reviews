@@ -1,8 +1,8 @@
 "use client"
 
-import React from 'react'
-import { Button } from '../ui/button';
-import { toast } from '../ui/use-toast';
+import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/use-toast";
+
 
 function CopyUrl({formUrl}:{formUrl:string}) {
   const copyToClipboard = () => {

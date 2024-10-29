@@ -2,7 +2,7 @@ import { getFormReviews } from '@/actions/forms';
 import Link from 'next/link';
 import {Message} from "@/model/Messages.model"
 import MessagesList from '@/components/custom/MessagesList';
-import CopyUrl from '@/components/custom/CopyUrl';
+import CopyUrl from '@/helpers/CopyUrl';
 
 
 async function page({params:{formId}}:{params:{formId:string}}) {

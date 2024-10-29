@@ -67,10 +67,14 @@ export const createForm= async (username:string,formData:any)=>{
 export const deleteMessage= async(formId:string,messageId:string)=>{
   await dbConnect();
   try {
-    const formReviews=await FormModel.updateOne(
+    const res=await FormModel.updateOne(
       {_id:formId},
       {$pull:{messages:messageId}}
     );
+
+    if(!res){
+      return {success:false}
+    }
 
     await MessageModel.deleteOne({_id:messageId});
 
