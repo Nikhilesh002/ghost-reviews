@@ -31,7 +31,6 @@ const FormDisplay=async()=> {
             <Button>Create new form</Button>
           </DialogTrigger>
           <DialogContent>
-            
             <DialogHeader>
               <DialogTitle>Create form</DialogTitle>
                 <CreateForm/>

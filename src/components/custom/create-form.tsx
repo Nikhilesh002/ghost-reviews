@@ -14,26 +14,22 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
-
 const CreateForm = () => {
-  
-  const [isSubmitting,setIsSubmitting]=useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const { toast } = useToast();
-  const router=useRouter();
+  const router = useRouter();
 
-  // zod implementation
-  const form=useForm<z.infer<typeof createFormSchema>>({
-    resolver:zodResolver(createFormSchema),
-    defaultValues:{
-      name:"",
-      context:"",
-      formExpiryDays:"",
-      formExpiryHrs:""
+  const form = useForm<z.infer<typeof createFormSchema>>({
+    resolver: zodResolver(createFormSchema),
+    defaultValues: {
+      name: "",
+      context: "",
+      formExpiryDays: "",
+      formExpiryHrs: ""
     }
   })
 
-  
   const onSubmit = async (data: z.infer<typeof createFormSchema>) => {
     setIsSubmitting(true);
 
@@ -42,32 +38,30 @@ const CreateForm = () => {
       const formData = {
         context: data.context,
         formExpiry: timeLeft,
-        name:data.name,
-        isAcceptingMessages:true,
-        isSuggestingMessages:true
+        name: data.name,
+        isAcceptingMessages: true,
+        isSuggestingMessages: true
       };
-      const res= await createForm("Nikhilesh007",formData);
+      const res = await createForm("Nikhilesh007", formData);
       toast({
-        title:res.message
+        title: res.message
       })
       router.replace("/u")
     } catch (error) {
-        console.error('Unexpected error:', error);
-        toast({
-            title: 'Unexpected Error',
-            description: 'Failed to create form',
-            variant: 'destructive',
-        });
+      console.error('Unexpected error:', error);
+      toast({
+        title: 'Unexpected Error',
+        description: 'Failed to create form',
+        variant: 'destructive',
+      });
     } finally {
-        setIsSubmitting(false);
+      setIsSubmitting(false);
     }
-};
-
+  };
 
   return (
     <div className="flex justify-center items-center mt-5">
-      <div className="w-full pt-8 px-2 space-y-8 bg-white">
-
+      <div className="w-full max-w-2xl pb-2 pt-4 px-4 md:px-6 space-y-8 bg-white dark:bg-gray-800 rounded-lg shadow-md">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
@@ -75,11 +69,16 @@ const CreateForm = () => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel className="text-gray-700 dark:text-gray-300">Name</FormLabel>
                   <FormControl>
-                    <Input type="text" placeholder="Name" {...field} />
+                    <Input 
+                      type="text" 
+                      placeholder="Name" 
+                      {...field} 
+                      className="bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-500 dark:text-red-400" />
                 </FormItem>
               )}
             />
@@ -88,28 +87,37 @@ const CreateForm = () => {
               name="context"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Enter context of this form</FormLabel>
+                  <FormLabel className="text-gray-700 dark:text-gray-300">Enter context of this form</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Enter context" {...field} />
+                    <Textarea 
+                      placeholder="Enter context" 
+                      {...field} 
+                      className="bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-500 dark:text-red-400" />
                 </FormItem>
               )}
             />
             
             <div className="space-y-2">
-              <p>Expires in</p>
+              <p className="text-gray-700 dark:text-gray-300">Expires in</p>
               <div className="flex space-x-3">
                 <FormField
                   control={form.control}
                   name="formExpiryDays"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Days</FormLabel>
+                    <FormItem className="flex-1">
+                      <FormLabel className="text-gray-700 dark:text-gray-300">Days</FormLabel>
                       <FormControl>
-                        <Input type="number" placeholder="Days" {...field} />
+                        <Input 
+                          type="number" 
+                          placeholder="Days" 
+                          {...field} 
+                          className="bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                        />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-red-500 dark:text-red-400" />
                     </FormItem>
                   )}
                 />
@@ -117,26 +125,35 @@ const CreateForm = () => {
                   control={form.control}
                   name="formExpiryHrs"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Hours</FormLabel>
+                    <FormItem className="flex-1">
+                      <FormLabel className="text-gray-700 dark:text-gray-300">Hours</FormLabel>
                       <FormControl>
-                        <Input type="number" placeholder="Hours" {...field} />
+                        <Input 
+                          type="number" 
+                          placeholder="Hours" 
+                          {...field} 
+                          className="bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                        />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-red-500 dark:text-red-400" />
                     </FormItem>
                   )}
                 />
               </div>
             </div>
             
-            <Button type="submit" disabled={isSubmitting}>
-              {
-                isSubmitting ? (
-                  <>
-                    <Loader2 className="mr-1.5 h-5 w-5 animate-spin " /> Please wait
-                  </>
-                ) : ('Create Form')
-              }
+            <Button 
+              type="submit" 
+              disabled={isSubmitting}
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-1.5 h-5 w-5 animate-spin" /> Please wait
+                </>
+              ) : (
+                'Create Form'
+              )}
             </Button>
           </form>
         </Form>

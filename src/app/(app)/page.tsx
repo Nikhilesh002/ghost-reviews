@@ -152,8 +152,10 @@ export default function LandingPage() {
       <section className="bg-gray-200 dark:bg-gray-800 py-16">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">Ready to Transform Your Feedback Process?</h2>
-          <p className="text-xl mb-8 text-gray-700 dark:text-gray-300">Join thousands of teams already using Ghost Reviews to gather high-quality, anonymous feedback.</p>
-          <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">Start Your Free Trial</Button>
+          <p className="text-xl mb-8 text-gray-700 dark:text-gray-300">Join Ghost Reviews to gather high-quality, anonymous feedback.</p>
+          <Link href="/signin">
+            <Button className="w-full md:w-auto bg-primary text-primary-foreground hover:bg-primary/90" variant={'default'}>Get Started</Button>
+          </Link>
         </div>
       </section>
 
@@ -169,7 +171,7 @@ export default function LandingPage() {
               <p className="text-sm text-gray-600 dark:text-gray-400">Empowering teams with intelligent feedback solutions.</p>
             </div>
             <div className="w-full md:w-1/3 text-center mt-4 md:mt-0">
-              <p className="text-sm text-gray-600 dark:text-gray-400">&copy; 2023 Ghost Reviews. All rights reserved.</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">&copy; 2024 Ghost Reviews. All rights reserved.</p>
             </div>
             <div className="w-full md:w-1/3 text-center md:text-right mt-4 md:mt-0">
               <a href="#" className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors mr-4">Privacy Policy</a>

@@ -80,3 +80,18 @@ export const deleteMessage= async(formId:string,messageId:string)=>{
   }
 }
 
+
+
+export const getFormInfo= async(formId:string)=>{
+  await dbConnect();
+  try {
+    const formInfo=await FormModel.findOne({_id:formId}).lean();
+
+    return {data:formInfo,message:"Form info"}
+  } catch (error) {
+    console.error(error)
+    return {message:"Failed to get form info"}
+  }
+}
+
+
