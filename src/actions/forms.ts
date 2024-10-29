@@ -3,12 +3,12 @@
 import dbConnect from "@/lib/dbConnect";
 import FormModel from "@/model/Forms.model";
 import UserModel from "@/model/User.model"
-import { ObjectId } from "mongoose";
+import mongoose,{ ObjectId } from "mongoose";
 
 
 export const getAllForms=async (username:string)=>{
+  await dbConnect()
   try {
-    dbConnect()
 
     const userForms = await UserModel.findOne({ username }).populate("forms").exec();
 
@@ -26,23 +26,22 @@ export const getAllForms=async (username:string)=>{
 
 
 export const getFormReviews= async(formId:string)=>{
+  await dbConnect();
   try {
-    dbConnect();
     const formReviews=await FormModel.findOne({_id:formId}).populate("messages").exec();
 
-    console.log(formReviews)
-    return formReviews
+    return formReviews?.messages
   } catch (error) {
     console.error(error)
-    return {error, message:"Failed to get user form reviews"}
+    return []
   }
 }
 
 
 
 export const createForm= async (username:string,formData:any)=>{
+  await dbConnect()
   try {
-    dbConnect()
     const userExists= await UserModel.findOne({username});
     if(!userExists){
       return {message:"User not found"};

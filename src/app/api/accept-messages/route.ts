@@ -1,6 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
 import FormModel from "@/model/Forms.model";
-import UserModel from "@/model/User.model";
 import { getServerSession, User } from "next-auth";
 import { NextRequest } from "next/server";
 

@@ -11,6 +11,7 @@ async function dbConnect():Promise<void>{ // void != c++ void. it means return t
     console.log("Already connected to database");
     return;
   }
+  console.log(mongoose.modelNames())
   try {
     const db=await mongoose.connect(process.env.MONGODB_URI || '',{});
     

@@ -28,12 +28,11 @@ import { IApiResponse } from "@/types/IApiResponse";
 
 
 type MessageCardProps={
-  key:number,
   message:Message;
-  onMessageDelete:(messageId:string)=>void
+  onMessageDelete?:(messageId:string)=>void
 }
 
-const MessageCard = ({message,onMessageDelete,key}:MessageCardProps) => {
+const MessageCard = ({message,onMessageDelete}:MessageCardProps) => {
 
   const {toast}=useToast();
 
@@ -43,7 +42,7 @@ const MessageCard = ({message,onMessageDelete,key}:MessageCardProps) => {
       toast({
         title:res.data.message
       })
-      onMessageDelete(message._id as string);
+      // onMessageDelete(message._id as string);
     }
   }
 
@@ -53,7 +52,7 @@ const MessageCard = ({message,onMessageDelete,key}:MessageCardProps) => {
   }
 
   return (
-    <Card key={key}>
+    <Card>
       <CardHeader>
         <div className="flex justify-between">
           <CardTitle>Message</CardTitle>

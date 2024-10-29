@@ -1,6 +1,6 @@
 import dbConnect from "@/lib/dbConnect";
 import FormModel from "@/model/Forms.model";
-import MessageModel, { Message } from "@/model/Messages.model";
+import MessageModel from "@/model/Messages.model";
 import { ObjectId } from "mongoose";
 
 
