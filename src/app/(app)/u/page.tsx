@@ -6,12 +6,21 @@ import { getAllForms } from "@/actions/forms"
 import { Form } from "@/model/Forms.model"
 import Link from "next/link"
 import CreateFormDialog from "@/components/custom/create-form-dialog"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/app/api/auth/[...nextauth]/options"
 
 
 
-const FormDisplay=async()=> {
 
-  const res=await getAllForms("Nikhilesh007");    // TODO userName fix
+const Page=async()=> {
+
+  const session=await getServerSession(authOptions);
+
+  if(!session){
+    return <div>Please login to continue</div>
+  }
+
+  const res=await getAllForms(session?.user.name ?? "");
   
   return (
     <div className="container mx-auto px-4 py-8">
@@ -76,4 +85,4 @@ const FormDisplay=async()=> {
   )
 }
 
-export default FormDisplay;
+export default Page;
