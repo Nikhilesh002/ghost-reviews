@@ -113,7 +113,7 @@ export default function LandingPage() {
           <Carousel
             plugins={[autoplayRef.current]}
             className="w-full max-w-xl mx-auto"
-            onSelect={(index) => setActiveIndex(index)}
+            // onChange={(index: number) => setActiveIndex(index)}
           >
             <CarouselContent>
               {testimonials.map((testimonial, index) => (

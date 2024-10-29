@@ -1,5 +1,5 @@
 import { Form } from "@/model/Forms.model";
-import { Message } from "@/model/User.model";
+import { Message } from "@/model/Messages.model";
 
 export interface IApiResponse{
   success:boolean,

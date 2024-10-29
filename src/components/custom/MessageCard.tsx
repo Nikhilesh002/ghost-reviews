@@ -71,7 +71,7 @@ const MessageCard = ({message,formId}:MessageCardProps) => {
             </AlertDialogContent>
           </AlertDialog>
         </div>
-        <CardDescription>Received at {formattedDate(message.createdAt)}</CardDescription>   {/* TODO Date format */}
+        <CardDescription>Received at {formattedDate(message.createdAt ?? new Date)}</CardDescription>   {/* TODO Date format */}
       </CardHeader>
       <CardContent>
         <p>{message.content}</p>

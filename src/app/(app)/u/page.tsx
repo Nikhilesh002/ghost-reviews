@@ -5,52 +5,31 @@ import { format } from "date-fns"
 import { getAllForms } from "@/actions/forms"
 import { Form } from "@/model/Forms.model"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import CreateForm from "@/components/custom/create-form"
+import CreateFormDialog from "@/components/custom/create-form-dialog"
 
 
 
 const FormDisplay=async()=> {
 
-  const forms=await getAllForms("Nikhilesh007");
+  const res=await getAllForms("Nikhilesh007");    // TODO userName fix
   
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between px-2 py-3">
         <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">Your Forms</h1>
-        <Dialog>
-          <DialogTrigger>
-            <Button>Create new form</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Create form</DialogTitle>
-                <CreateForm/>
-              <DialogDescription>
-              </DialogDescription>
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
+        <CreateFormDialog/>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {forms?.map((form:Form) => (
-          <Link key={form._id} href={`/u/form/${form._id}`} >
+        { res.success && res.forms?.map((form:Form) => (
+          <Link key={form._id as string} href={`/u/form/${form._id}`} >
             <Card className="bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow">
               <CardHeader>
                 <div className="flex justify-between items-center">
                   <CardTitle className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                     Form {form.name}
                   </CardTitle>
-                  <Badge variant={form.isAcceptingMessages ? "success" : "destructive"}>
+                  <Badge variant={form.isAcceptingMessages ? "outline" : "destructive"}>
                     {form.isAcceptingMessages ? (
                       <span className="flex items-center">
                         <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>

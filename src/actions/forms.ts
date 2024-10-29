@@ -2,7 +2,7 @@
 
 import { getAISuggestions } from "@/helpers/getAISuggestions";
 import dbConnect from "@/lib/dbConnect";
-import FormModel from "@/model/Forms.model";
+import FormModel, { Form } from "@/model/Forms.model";
 import MessageModel, { Message } from "@/model/Messages.model";
 import UserModel from "@/model/User.model"
 import { ObjectId } from "mongoose";
@@ -11,17 +11,16 @@ import { ObjectId } from "mongoose";
 export const getAllForms=async (username:string)=>{
   await dbConnect()
   try {
-
     const userForms = await UserModel.findOne({ username }).populate("forms").exec();
 
     if(!userForms){
-      return {data:[],message:"User not found"};
+      return {success:false,message:"User not found"};
     }
     
-    return userForms.forms;
+    return {success:true,forms:userForms.forms as unknown as Form[]};
   } catch (error) {
     console.error(error)
-    return {data:[],error, message:"Failed to get user forms"}
+    return {success:false,error, message:"Failed to get user forms"}
   }
 }
 
