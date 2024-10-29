@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { sendMessage, getMessageSuggestions } from "@/actions/forms";
+import { sendMessage, getMessageSuggestions } from "@/actions/messageActions";
 
 const formSchema = z.object({
   content: z.string().min(10).max(300),

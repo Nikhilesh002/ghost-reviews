@@ -1,10 +1,9 @@
-"use client"
+"use client";
 
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -18,34 +17,29 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
 import { Message } from "@/model/Messages.model";
 import { useToast } from "../ui/use-toast";
-import { deleteMessage } from "@/actions/forms";
+import { deleteMessage } from "@/actions/messageActions";
+import { format } from 'date-fns';
+import { enIN } from 'date-fns/locale';
 
+type MessageCardProps = {
+  message: Message;
+  formId: string;
+};
 
-type MessageCardProps={
-  message:Message;
-  formId:string;
-}
+const MessageCard = ({ message, formId }: MessageCardProps) => {
+  const { toast } = useToast();
 
-const MessageCard = ({message,formId}:MessageCardProps) => {
-
-  const {toast}=useToast();
-
-  const handleDeleteConfirm=async()=>{
-    const res=await deleteMessage(formId,message._id as string);
+  const handleDeleteConfirm = async () => {
+    const res = await deleteMessage(formId, message._id as string);
     toast({
-      title:res.message ?? "Message Deleted"
-    })
-  }
-
-  const formattedDate=(date:Date)=>{
-    const niceDate=new Date(date).toLocaleString().split(',');
-    return "on "+niceDate[0]+" at "+niceDate[1].substring(0,6)+niceDate[1].substring(9,12);
-  }
+      title: res.message ?? "Message Deleted",
+    });
+  };
 
   return (
     <Card>
@@ -54,7 +48,9 @@ const MessageCard = ({message,formId}:MessageCardProps) => {
           <CardTitle>Message</CardTitle>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button className="w-10 h-10 p-0" variant="destructive"><X className="w-8 h-8"/></Button>
+              <Button className="w-10 h-10 p-0" variant="destructive">
+                <X className="w-8 h-8" />
+              </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
@@ -71,13 +67,13 @@ const MessageCard = ({message,formId}:MessageCardProps) => {
             </AlertDialogContent>
           </AlertDialog>
         </div>
-        <CardDescription>Received at {formattedDate(message.createdAt ?? new Date)}</CardDescription>   {/* TODO Date format */}
+        <CardDescription>Received at {format(new Date(message.createdAt), "dd-MMM-yy HH:mm", { locale: enIN })}</CardDescription>
       </CardHeader>
       <CardContent>
         <p>{message.content}</p>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
 export default MessageCard;

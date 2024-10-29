@@ -1,4 +1,4 @@
-import { getFormInfo, getFormAcceptStatus } from '@/actions/forms';
+import { getFormInfo, getFormAcceptStatus } from '@/actions/formActions';
 import ReviewForm from '@/components/custom/review-form';
 
 const Page = async ({ params: { formId } }: { params: { formId: string } }) => {

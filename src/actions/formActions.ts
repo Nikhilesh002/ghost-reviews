@@ -1,9 +1,7 @@
 "use server"
 
-import { getAISuggestions } from "@/helpers/getAISuggestions";
 import dbConnect from "@/lib/dbConnect";
 import FormModel, { Form } from "@/model/Forms.model";
-import MessageModel, { Message } from "@/model/Messages.model";
 import UserModel from "@/model/User.model"
 import { ObjectId } from "mongoose";
 
@@ -63,28 +61,6 @@ export const createForm= async (username:string,formData:any)=>{
 }
 
 
-export const deleteMessage= async(formId:string,messageId:string)=>{
-  await dbConnect();
-  try {
-    const res=await FormModel.updateOne(
-      {_id:formId},
-      {$pull:{messages:messageId}}
-    );
-
-    if(!res){
-      return {success:false}
-    }
-
-    await MessageModel.deleteOne({_id:messageId});
-
-    return {message:"Message Deleted"}
-  } catch (error) {
-    console.error(error)
-    return {message:"Failed to delete message"}
-  }
-}
-
-
 
 export const getFormInfo= async(formId:string)=>{
   await dbConnect();
@@ -97,6 +73,7 @@ export const getFormInfo= async(formId:string)=>{
     return {message:"Failed to get form info"}
   }
 }
+
 
 
 export const getFormAcceptStatus=async (formId:string)=>{
@@ -132,35 +109,5 @@ export const toggleFormAcceptStatus=async (formId:string)=>{
   }
 }
 
-
-export const sendMessage=async (formId:string,content:string)=>{
-  await dbConnect();
-  try {
-    const formInfo=await FormModel.findOne({_id:formId});
-    if(!formInfo){
-      return {success:false};
-    }
-    const newMessage= new MessageModel({content});
-    formInfo.messages.push(newMessage._id as ObjectId);
-    await Promise.all([formInfo.save(),newMessage.save()]);
-
-    return {success:true,isAcceptingMessages:formInfo?.isAcceptingMessages ?? false}
-  } catch (error) {
-    console.error(error)
-    return {success:false,message:"Failed to get form accept status"}
-  }
-}
-
-
-
-export const getMessageSuggestions=async (context:string)=>{
-  try {
-    const res= await getAISuggestions(context);
-    return {success:true, messages:res.data.choices[0].message.content }
-  } catch (error) {
-    console.error(error)
-    return {success:false,message:"Failed to get form accept status"}
-  }
-}
 
 

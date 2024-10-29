@@ -1,4 +1,4 @@
-import { getFormReviews } from '@/actions/forms';
+import { getFormReviews } from '@/actions/formActions';
 import {Message} from "@/model/Messages.model"
 import MessagesList from '@/components/custom/MessagesList';
 import ShareReviewLink from '@/components/custom/ShareReviewLink';

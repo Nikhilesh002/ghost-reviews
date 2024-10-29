@@ -2,7 +2,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Brain, Calendar, Clock } from "lucide-react"
 import { format } from "date-fns"
-import { getAllForms } from "@/actions/forms"
+import { getAllForms } from "@/actions/formActions"
 import { Form } from "@/model/Forms.model"
 import Link from "next/link"
 import CreateFormDialog from "@/components/custom/create-form-dialog"
