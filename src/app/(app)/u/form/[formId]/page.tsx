@@ -4,11 +4,15 @@ import MessagesList from '@/components/custom/MessagesList';
 import ShareReviewLink from '@/components/custom/ShareReviewLink';
 import Toggles from '@/components/custom/toggles';
 import { Separator } from '@/components/ui/separator';
+import { Loader2, RefreshCcw } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 
 async function page({params:{formId}}:{params:{formId:string}}) {
 
   const messages= JSON.parse(JSON.stringify(await getFormReviews(formId))) as Message[];
+
+  const isLoading=false;
 
 
   return (
@@ -27,6 +31,20 @@ async function page({params:{formId}}:{params:{formId:string}}) {
       <div className="">
         <Toggles formId={formId}/>
       </div>
+
+      <Button
+        className="mt-4"
+        variant="outline"
+        onClick={(e) => {
+          e.preventDefault();
+        }}
+      >
+        {isLoading ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : (
+          <RefreshCcw className="h-4 w-4" />
+        )}
+      </Button>
 
       <Separator className='mt-4' />
 

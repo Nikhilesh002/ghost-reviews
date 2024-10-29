@@ -78,7 +78,7 @@ export const getFormInfo= async(formId:string)=>{
 export const getFormAcceptStatus=async (formId:string)=>{
   await dbConnect();
   try {
-    const formInfo=await FormModel.findOne({_id:formId}).lean();
+    const formInfo=await FormModel.findOne({_id:formId});
     if(!formInfo){
       return {success:false};
     }
@@ -94,7 +94,7 @@ export const getFormAcceptStatus=async (formId:string)=>{
 export const toggleFormAcceptStatus=async (formId:string)=>{
   await dbConnect();
   try {
-    const formInfo=await FormModel.findOne({_id:formId}).lean();
+    const formInfo=await FormModel.findOne({_id:formId});
     if(!formInfo){
       return {success:false};
     }
@@ -107,6 +107,45 @@ export const toggleFormAcceptStatus=async (formId:string)=>{
     return {success:false,message:"Failed to get form accept status"}
   }
 }
+
+
+
+export const getFormAIStatus=async (formId:string)=>{
+  await dbConnect();
+  console.log("getFormAIStatus")
+  try {
+    const formInfo=await FormModel.findOne({_id:formId});
+    if(!formInfo){
+      return {success:false};
+    }
+    return {success:true,isSuggestingMessages:formInfo.isSuggestingMessages}
+  } catch (error) {
+    console.error(error)
+    return {success:false,message:"Failed to get form accept status"}
+  }
+}
+
+
+
+export const toggleFormAIStatus=async (formId:string)=>{
+  await dbConnect();
+  console.log("toggleFormAIStatus")
+  try {
+    const formInfo=await FormModel.findOne({_id:formId});
+    if(!formInfo){
+      return {success:false};
+    }
+    formInfo.isSuggestingMessages=!formInfo.isSuggestingMessages;
+    await formInfo.save();
+
+    return {success:true}
+  } catch (error) {
+    console.error(error)
+    return {success:false,message:"Failed to get form accept status"}
+  }
+}
+
+
 
 
 
