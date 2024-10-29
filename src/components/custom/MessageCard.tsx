@@ -25,25 +25,23 @@ import { Message } from "@/model/Messages.model";
 import { useToast } from "../ui/use-toast";
 import axios from "axios";
 import { IApiResponse } from "@/types/IApiResponse";
+import { deleteMessage } from "@/actions/forms";
 
 
 type MessageCardProps={
   message:Message;
-  onMessageDelete?:(messageId:string)=>void
+  formId:string;
 }
 
-const MessageCard = ({message,onMessageDelete}:MessageCardProps) => {
+const MessageCard = ({message,formId}:MessageCardProps) => {
 
   const {toast}=useToast();
 
   const handleDeleteConfirm=async()=>{
-    const res=await axios.delete<IApiResponse>(`/api/delete-message/${message._id}`);
-    if(res.status==200 && res.data.success){
-      toast({
-        title:res.data.message
-      })
-      // onMessageDelete(message._id as string);
-    }
+    const res=await deleteMessage(formId,message._id as string);
+    toast({
+      title:res.message ?? "Message Deleted"
+    })
   }
 
   const formattedDate=(date:Date)=>{

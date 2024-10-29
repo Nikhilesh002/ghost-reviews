@@ -1,5 +1,6 @@
 import dbConnect from "@/lib/dbConnect";
-import UserModel from "@/model/User.model";
+import FormModel from "@/model/Forms.model";
+import MessageModel from "@/model/Messages.model";
 import { getServerSession, User } from "next-auth";
 
 export const dynamic = 'force-dynamic';
@@ -14,7 +15,7 @@ export async function DELETE(req:Request,{params}:{params:{messageId:string}}) {
       return Response.json({ success: false, message: "Not authorised" },{status:401});
     }
     const messageId=params.messageId;
-    const updateRes= await UserModel.updateOne(
+    const updateRes= await FormModel.updateOne(
       {username:user.name},
       {$pull:{messages:{_id:messageId}}}
     );

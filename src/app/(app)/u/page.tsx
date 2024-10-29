@@ -5,6 +5,17 @@ import { format } from "date-fns"
 import { getAllForms } from "@/actions/forms"
 import { Form } from "@/model/Forms.model"
 import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import CreateForm from "@/components/custom/create-form"
+
 
 
 const FormDisplay=async()=> {
@@ -13,10 +24,27 @@ const FormDisplay=async()=> {
   
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6 text-gray-900 dark:text-gray-100">Your Forms</h1>
+      <div className="flex justify-between px-2 py-3">
+        <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">Your Forms</h1>
+        <Dialog>
+          <DialogTrigger>
+            <Button>Create new form</Button>
+          </DialogTrigger>
+          <DialogContent>
+            
+            <DialogHeader>
+              <DialogTitle>Create form</DialogTitle>
+                <CreateForm/>
+              <DialogDescription>
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {forms?.map((form:Form) => (
-          <Link key={form._id} href={`/form/${form._id}`} >
+          <Link key={form._id} href={`/u/form/${form._id}`} >
             <Card className="bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow">
               <CardHeader>
                 <div className="flex justify-between items-center">

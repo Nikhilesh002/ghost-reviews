@@ -2,6 +2,7 @@
 
 import dbConnect from "@/lib/dbConnect";
 import FormModel from "@/model/Forms.model";
+import MessageModel from "@/model/Messages.model";
 import UserModel from "@/model/User.model"
 import mongoose,{ ObjectId } from "mongoose";
 
@@ -62,5 +63,20 @@ export const createForm= async (username:string,formData:any)=>{
 }
 
 
+export const deleteMessage= async(formId:string,messageId:string)=>{
+  await dbConnect();
+  try {
+    const formReviews=await FormModel.updateOne(
+      {_id:formId},
+      {$pull:{messages:messageId}}
+    );
 
+    await MessageModel.deleteOne({_id:messageId});
+
+    return {message:"Message Deleted"}
+  } catch (error) {
+    console.error(error)
+    return {message:"Failed to delete message"}
+  }
+}
 
