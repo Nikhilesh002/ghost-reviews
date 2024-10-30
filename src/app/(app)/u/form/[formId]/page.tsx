@@ -35,9 +35,9 @@ async function page({params:{formId}}:{params:{formId:string}}) {
       <Button
         className="mt-4"
         variant="outline"
-        onClick={(e) => {
-          e.preventDefault();
-        }}
+        // onClick={(e) => {
+        //   e.preventDefault();
+        // }}
       >
         {isLoading ? (
           <Loader2 className="h-4 w-4 animate-spin" />
