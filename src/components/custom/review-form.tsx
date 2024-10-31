@@ -60,7 +60,7 @@ const ReviewForm = ({
       setIsGettingSuggestions(false);
       return;
     }
-    setMessages(res.messages.split("||"));
+    setMessages(res.messages.split("\n"));
     toast({ title: "Fetched AI suggestions" });
     setIsGettingSuggestions(false);
   }, [reviewForm.context, toast]);

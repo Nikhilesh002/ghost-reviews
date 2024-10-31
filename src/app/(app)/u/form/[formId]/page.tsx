@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 
 async function page({params:{formId}}:{params:{formId:string}}) {
 
-  const messages= JSON.parse(JSON.stringify(await getFormReviews(formId))) as Message[];
+  const {messages,context,name}= JSON.parse(JSON.stringify(await getFormReviews(formId)));
 
   const isLoading=false;
 
@@ -18,7 +18,9 @@ async function page({params:{formId}}:{params:{formId:string}}) {
   return (
     <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white dark:bg-gray-800 rounded w-full max-w-6xl">
 
-      <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">User Dashboard</h1>
+      <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">Form name : <span className='font-normal'>{name}</span></h1>
+
+      <h2 className="text-lg mb-2 text-gray-800 dark:text-gray-200"><span className='font-semibold'>Context :</span> {context}</h2>
 
       <div className="mb-4">
         <h2 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">Copy Your Unique Link</h2>

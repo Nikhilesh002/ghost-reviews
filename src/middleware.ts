@@ -1,22 +1,31 @@
-import { NextResponse,NextRequest } from 'next/server'
+import { NextResponse, NextRequest } from 'next/server'
 import { getToken } from "next-auth/jwt"
-export {default} from "next-auth/middleware"
+export { default } from "next-auth/middleware"
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
-  const token=await getToken({req:request});
-  const url=request.nextUrl;
-  if(token && (
+  const token = await getToken({ req: request });
+  const url = request.nextUrl;
+
+  // Allow public access to /u/form/[id]/review
+  if (url.pathname.match(/^\/u\/form\/[^/]+\/review$/)) {
+    return NextResponse.next();
+  }
+
+  // Redirect authenticated users away from auth pages
+  if (token && (
     url.pathname.startsWith('/signin') ||
     url.pathname.startsWith('/signup') ||
-    url.pathname.startsWith('/verify') 
-    // || url.pathname.startsWith('/') 
-  )){
-    return NextResponse.redirect(new URL('/u',request.url));
+    url.pathname.startsWith('/verify')
+  )) {
+    return NextResponse.redirect(new URL('/u', request.url));
   }
-  if(!token && url.pathname.startsWith('/u')){
+
+  // Redirect unauthenticated users trying to access protected routes under /u
+  if (!token && url.pathname.startsWith('/u')) {
     return NextResponse.redirect(new URL('/', request.url));
   }
+
   return NextResponse.next();
 }
 

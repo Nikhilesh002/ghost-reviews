@@ -29,7 +29,7 @@ export const getFormReviews= async(formId:string)=>{
   try {
     const formReviews=await FormModel.findOne({_id:formId}).populate("messages").exec();
 
-    return formReviews?.messages
+    return {messages:formReviews?.messages,context:formReviews?.context,name:formReviews.name}
   } catch (error) {
     console.error(error)
     return []
@@ -112,7 +112,6 @@ export const toggleFormAcceptStatus=async (formId:string)=>{
 
 export const getFormAIStatus=async (formId:string)=>{
   await dbConnect();
-  console.log("getFormAIStatus")
   try {
     const formInfo=await FormModel.findOne({_id:formId});
     if(!formInfo){
@@ -129,7 +128,6 @@ export const getFormAIStatus=async (formId:string)=>{
 
 export const toggleFormAIStatus=async (formId:string)=>{
   await dbConnect();
-  console.log("toggleFormAIStatus")
   try {
     const formInfo=await FormModel.findOne({_id:formId});
     if(!formInfo){

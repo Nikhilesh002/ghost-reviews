@@ -36,7 +36,7 @@ const Page=async()=> {
               <CardHeader>
                 <div className="flex justify-between items-center">
                   <CardTitle className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                    Form {form.name}
+                    {form.name}
                   </CardTitle>
                   <Badge variant={form.isAcceptingMessages ? "outline" : "destructive"}>
                     {form.isAcceptingMessages ? (
