@@ -27,9 +27,9 @@ export const getAllForms=async (username:string)=>{
 export const getFormReviews= async(formId:string)=>{
   await dbConnect();
   try {
-    const formReviews=await FormModel.findOne({_id:formId}).populate("messages").exec();
+    const formReviews=await FormModel.findOne({_id:formId}).populate("messages").lean().exec();
 
-    return {messages:formReviews?.messages,context:formReviews?.context,name:formReviews.name}
+    return {messages:formReviews?.messages,context:formReviews?.context,name:formReviews?.name}
   } catch (error) {
     console.error(error)
     return []
@@ -64,12 +64,12 @@ export const createForm= async (username:string,formData:any)=>{
 export const getFormInfo= async(formId:string)=>{
   await dbConnect();
   try {
-    const formInfo=await FormModel.findOne({_id:formId}).lean();
+    const formInfo:Form | null=await FormModel.findOne({_id:formId}).lean();
 
     return {data:formInfo,message:"Form info"}
   } catch (error) {
     console.error(error)
-    return {message:"Failed to get form info"}
+    return {message:"Failed to get form info",data:null}
   }
 }
 

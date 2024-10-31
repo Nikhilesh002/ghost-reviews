@@ -24,7 +24,7 @@ const ReviewForm = ({
   isSuggestingMessages
 }: {
   formId: string;
-  reviewForm: Form;
+  reviewForm: Form | null;
   isAcceptingMessages: boolean;
   isSuggestingMessages:boolean;
 }) => {
@@ -51,7 +51,7 @@ const ReviewForm = ({
 
   const suggestMessages = useCallback(async () => {
     setIsGettingSuggestions(true);
-    const res = await getMessageSuggestions(reviewForm.context as unknown as string);
+    const res = await getMessageSuggestions(reviewForm?.context as unknown as string);
     if (!res.success) {
       toast({
         title: "Error getting AI suggestions",
@@ -63,7 +63,7 @@ const ReviewForm = ({
     setMessages(res.messages.split("\n"));
     toast({ title: "Fetched AI suggestions" });
     setIsGettingSuggestions(false);
-  }, [reviewForm.context, toast]);
+  }, [reviewForm?.context, toast]);
 
   return (
     <div>

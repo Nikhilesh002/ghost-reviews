@@ -29,12 +29,14 @@ import { enIN } from 'date-fns/locale';
 type MessageCardProps = {
   message: Message;
   formId: string;
+  onDelete: ()=>void
 };
 
-const MessageCard = ({ message, formId }: MessageCardProps) => {
+const MessageCard = ({ message, formId,onDelete }: MessageCardProps) => {
   const { toast } = useToast();
 
   const handleDeleteConfirm = async () => {
+    onDelete()
     const res = await deleteMessage(formId, message._id as string);
     toast({
       title: res.message ?? "Message Deleted",
