@@ -1,9 +1,10 @@
-import { getFormInfo, getFormAcceptStatus } from '@/actions/formActions';
+import { getFormInfo, getFormAcceptStatus, getFormAIStatus } from '@/actions/formActions';
 import ReviewForm from '@/components/custom/review-form';
 
 const Page = async ({ params: { formId } }: { params: { formId: string } }) => {
   const { data } = await getFormInfo(formId);
   const acceptStatus = await getFormAcceptStatus(formId);
+  const AIStatus= await getFormAIStatus(formId);
 
   return (
     <div>
@@ -13,7 +14,8 @@ const Page = async ({ params: { formId } }: { params: { formId: string } }) => {
       <ReviewForm 
         formId={formId} 
         reviewForm={data} 
-        isAcceptingMessages={acceptStatus.isAcceptingMessages || false} 
+        isAcceptingMessages={acceptStatus.isAcceptingMessages || false}
+        isSuggestingMessages={AIStatus.isSuggestingMessages || false}
       />
     </div>
   );
