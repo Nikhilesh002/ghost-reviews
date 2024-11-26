@@ -52,7 +52,7 @@ const ReviewForm = ({
   const suggestMessages = useCallback(async () => {
     setIsGettingSuggestions(true);
     const res = await getMessageSuggestions(reviewForm?.context as unknown as string);
-    if (!res.success) {
+    if (!res.success || !res.messages) {
       toast({
         title: "Error getting AI suggestions",
         variant: "destructive",
@@ -60,7 +60,7 @@ const ReviewForm = ({
       setIsGettingSuggestions(false);
       return;
     }
-    setMessages(res.messages.split("\n"));
+    setMessages(res.messages.split("||"));
     toast({ title: "Fetched AI suggestions" });
     setIsGettingSuggestions(false);
   }, [reviewForm?.context, toast]);

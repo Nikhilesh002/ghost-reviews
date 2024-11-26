@@ -6,6 +6,16 @@ const Page = async ({ params: { formId } }: { params: { formId: string } }) => {
   const acceptStatus = await getFormAcceptStatus(formId);
   const AIStatus= await getFormAIStatus(formId);
 
+  if(!data){
+    return (
+      <div>
+        <h1 className="text-3xl text-center font-medium mt-5 mb-3">
+          Form not found
+        </h1>
+      </div>
+    )
+  }
+
   return (
     <div>
       <h1 className="text-3xl text-center font-medium mt-5 mb-3">

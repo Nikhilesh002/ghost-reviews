@@ -2,6 +2,7 @@
 
 import dbConnect from "@/lib/dbConnect";
 import FormModel, { Form } from "@/model/Forms.model";
+import MessageModel from "@/model/Messages.model";
 import UserModel from "@/model/User.model"
 import { ObjectId } from "mongoose";
 
@@ -29,7 +30,7 @@ export const getFormReviews= async(formId:string)=>{
   try {
     const formReviews=await FormModel.findOne({_id:formId}).populate("messages").lean().exec();
 
-    return {messages:formReviews?.messages,context:formReviews?.context,name:formReviews?.name}
+    return {messages:formReviews?.messages,context:formReviews?.context.toString(),name:formReviews?.name.toString}
   } catch (error) {
     console.error(error)
     return []
@@ -61,17 +62,36 @@ export const createForm= async (username:string,formData:any)=>{
 
 
 
-export const getFormInfo= async(formId:string)=>{
+import { Types } from 'mongoose';
+
+export const getFormInfo = async (formId: string) => {
   await dbConnect();
   try {
-    const formInfo:Form | null=await FormModel.findOne({_id:formId}).lean();
+    const formInfo = await FormModel.findOne({ _id: formId }).lean();
+    if (!formInfo) {
+      return { message: "Form not found", data: null };
+    }
 
-    return {data:formInfo,message:"Form info"}
+    // const cnt = await MessageModel.countDocuments();
+    // console.log(cnt)
+
+    const transformedForm = {
+      name: formInfo.name.toString(),
+      context: formInfo.context.toString(),
+      isAcceptingMessages: formInfo.isAcceptingMessages,
+      isSuggestingMessages: formInfo.isSuggestingMessages,
+      _id: formInfo._id.toString(),
+      createdAt: formInfo.createdAt?.toISOString(),
+      formExpiry: formInfo.formExpiry?.toISOString(),
+    } as unknown as Form;
+
+    return { data: transformedForm, message: "Form info" };
   } catch (error) {
-    console.error(error)
-    return {message:"Failed to get form info",data:null}
+    console.error(error);
+    return { message: "Failed to get form info", data: null };
   }
-}
+};
+
 
 
 

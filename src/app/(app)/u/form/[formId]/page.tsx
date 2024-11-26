@@ -9,6 +9,7 @@ import { Separator } from '@/components/ui/separator';
 import { Loader2, RefreshCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import MessageCard from '@/components/custom/MessageCard';
+import { toast } from '@/components/ui/use-toast';
 
 
 export default function Page({ params: { formId } }: {params: { formId: string }}) {
@@ -21,13 +22,13 @@ export default function Page({ params: { formId } }: {params: { formId: string }
     setIsLoading(true);
     try {
       const res = JSON.parse(JSON.stringify(await getFormReviews(formId)));
-      console.log(res)
       const { messages, context, name }=res;
       setMessages(messages || []);
       setContext(context || '');
       setName(name || '');
     } catch (error) {
       console.error('Failed to fetch form reviews:', error);
+      toast({title:"Failed to fetch messages"})
     } finally {
       setIsLoading(false);
     }
@@ -91,6 +92,7 @@ export default function Page({ params: { formId } }: {params: { formId: string }
                 message={message}
                 formId={formId}
                 onDelete={fetchFormReviews}
+                setIsLoading={setIsLoading}
               />
             </div>
           ))

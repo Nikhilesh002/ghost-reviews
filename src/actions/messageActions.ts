@@ -11,7 +11,7 @@ import { ObjectId } from "mongoose";
 export const getMessageSuggestions=async (context:string)=>{
   try {
     const res= await getAISuggestions(context);
-    return {success:true, messages:res.data.choices[0].message.content }
+    return {success:true, messages:res }
   } catch (error) {
     console.error(error)
     return {success:false,message:"Failed to get form accept status"}
